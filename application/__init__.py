@@ -21,9 +21,8 @@ def create_app():
     os.makedirs(app.instance_path, exist_ok=True)
 
     # ロガー設定
-    log_dir = os.path.join(os.path.dirname(app.root_path), 'log')
-    os.makedirs(log_dir, exist_ok=True)
-    log_file = os.path.join(log_dir, app.config['LOG_FILE_NAME'])
+    os.makedirs(app.config['LOG_DIR'], exist_ok=True)
+    log_file = os.path.join(app.config['LOG_DIR'], app.config['LOG_FILE_NAME'])
     handler = logging.handlers.RotatingFileHandler(log_file, "a+",
                                                    maxBytes=3000,
                                                    backupCount=5)

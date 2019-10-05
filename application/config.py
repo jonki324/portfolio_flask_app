@@ -4,6 +4,7 @@ from pathlib import Path
 class Config(object):
     DEBUG = False
     TESTING = False
+    LOG_DIR = str(Path(__file__).resolve().parents[1] / 'log')
     LOG_FILE_NAME = 'application.log'
     LOG_FORMAT = '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
