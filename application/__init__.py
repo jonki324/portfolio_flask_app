@@ -2,6 +2,8 @@ import logging
 import logging.handlers
 import os
 from flask import Flask, render_template
+from flask_migrate import Migrate
+from application.models.database import db
 
 
 def create_app():
@@ -19,14 +21,19 @@ def create_app():
     os.makedirs(app.instance_path, exist_ok=True)
 
     # ロガー設定
-    log_dir = os.path.join(os.path.dirname(app.root_path), 'log')
-    os.makedirs(log_dir, exist_ok=True)
-    log_file = os.path.join(log_dir, app.config['LOG_FILE_NAME'])
+    os.makedirs(app.config['LOG_DIR'], exist_ok=True)
+    log_file = os.path.join(app.config['LOG_DIR'], app.config['LOG_FILE_NAME'])
     handler = logging.handlers.RotatingFileHandler(log_file, "a+",
                                                    maxBytes=3000,
                                                    backupCount=5)
     handler.setFormatter(logging.Formatter(app.config['LOG_FORMAT']))
     app.logger.addHandler(handler)
+
+    # データベース設定
+    db.init_app(app)
+
+    # データベースマイグレーション設定
+    Migrate(app, db, directory=app.config['MIGRATIONS_DIR'])
 
     @app.route('/')
     def index():

@@ -9,6 +9,9 @@ flake8 = "*"
 
 [packages]
 flask = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+flask-script = "*"
 
 [requires]
 python_version = "3.7"
@@ -16,4 +19,8 @@ python_version = "3.7"
 [scripts]
 start = "python run.py runserver"
 format = "autopep8 -ivr ."
-lint = "flake8 --show-source --exclude .venv ."
+lint = "flake8 --show-source ."
+init = "python run.py db init"
+migrate = "python run.py db migrate"
+upgrade = "python run.py db upgrade"
+downgrade = "python run.py db downgrade"
