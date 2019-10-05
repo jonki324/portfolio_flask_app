@@ -2,6 +2,8 @@ import logging
 import logging.handlers
 import os
 from flask import Flask, render_template
+from flask_migrate import Migrate
+from application.models.database import db
 
 
 def create_app():
@@ -27,6 +29,12 @@ def create_app():
                                                    backupCount=5)
     handler.setFormatter(logging.Formatter(app.config['LOG_FORMAT']))
     app.logger.addHandler(handler)
+
+    # データベース設定
+    db.init_app(app)
+
+    # データベースマイグレーション設定
+    Migrate(app, db, directory=app.config['MIGRATIONS_DIR'])
 
     @app.route('/')
     def index():
