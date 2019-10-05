@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>Hello</title>
-</head>
-<body>
-    Hello, World!
-</body>
-</html>
+{% extends 'layout.html' %}
+
+{% block header %}
+    <h1>{% block title %}Hello{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <p>World</p>
+{% endblock %}
