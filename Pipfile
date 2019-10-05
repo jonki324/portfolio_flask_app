@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+autopep8 = "*"
+flake8 = "*"
+
+[packages]
+flask = "*"
+
+[requires]
+python_version = "3.7"
+
+[scripts]
+start = "python app.py runserver"
+format = "autopep8 -ivr ."
+lint = "flake8 --show-source --exclude .venv ."
