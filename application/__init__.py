@@ -4,6 +4,7 @@ import os
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from application.models.database import db
+from application.models.user import User
 
 
 def create_app():
