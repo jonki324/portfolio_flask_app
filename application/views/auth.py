@@ -8,6 +8,7 @@ auth_view = Blueprint('auth_view', __name__)
 
 @auth_view.route('/login', methods=['GET', 'POST'])
 def login():
+    current_app.logger.info('ログイン処理開始')
     return render_template('login.html')
 
 
