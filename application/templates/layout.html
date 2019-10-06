@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
     <title>{% block title %}{% endblock %} - Mini Blog</title>
 </head>
 <body>
 <header>
+<nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" href="">
+        <i class="fab fa-blogger-b"></i>
+    </a>
+</nav>
 {% block header %}{% endblock %}
 </header>
 <main>
