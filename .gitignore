@@ -107,6 +107,6 @@ venv.bak/
 .vscode
 
 # Myproject
-application/log/
+log/
 development.db
 testing.db

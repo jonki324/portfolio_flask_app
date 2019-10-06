@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3 text-center">
+            <span style="font-size: 80px; color: Dodgerblue;">
+                <i class="fab fa-blogger"></i>
+            </span>
+            <h1>{% block title %}サインアップ{% endblock %}</h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h2 class="card-title text-center">
+                        <span style="font-size: 60px; color: Dodgerblue;">
+                            <i class="far fa-user"></i>
+                        </span>
+                    </h2>
+                    {% from "helpers/_formhelpers.html" import render_field %}
+                    <form action="{{ url_for('auth_view.signup') }}", method="post">
+                        {{ form.csrf_token }}
+                        {{ render_field(form.name, placeholder="ニックネーム") }}
+                        {{ render_field(form.email, placeholder="email@mail.com") }}
+                        {{ render_field(form.password, placeholder="半角英数字") }}
+                        {{ render_field(form.confirm, placeholder="半角英数字") }}
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block">サインアップ</button>
+                        </div>
+                        <div class="form-group text-center">
+                            <a href="{{ url_for('auth_view.login') }}">ログインへ</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
