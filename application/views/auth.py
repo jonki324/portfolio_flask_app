@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template
+from application.froms.signup import SignupForm
+from flask import (Blueprint, current_app, render_template)
 
 auth_view = Blueprint('auth_view', __name__)
 
@@ -10,4 +11,6 @@ def login():
 
 @auth_view.route('/signup', methods=['GET', 'POST'])
 def signup():
-    return render_template('signup.html')
+    current_app.logger.info('サインアップ処理開始')
+    form = SignupForm()
+    return render_template('signup.html', form=form)

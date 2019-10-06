@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 
@@ -10,6 +11,8 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MIGRATIONS_DIR = str(Path(__file__).parent / 'migrations')
+    SECRET_KEY = os.urandom(24)
+    WTF_CSRF_SECRET_KEY = os.urandom(24)
 
 
 class ProductionConfig(Config):
@@ -28,3 +31,4 @@ class TestingConfig(Config):
     LOG_FILE_NAME = 'testing.log'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(str(Path(__file__)
                                                         .resolve().parents[1] / 'testing.db'))
+    WTF_CSRF_ENABLED = False
