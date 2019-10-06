@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+    <h1>{% block title %}ログイン{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('auth_view.signup') }}">サインアップ</a>
+{% endblock %}

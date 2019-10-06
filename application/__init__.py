@@ -5,6 +5,7 @@ from flask import Flask, render_template
 from flask_migrate import Migrate
 from application.models.database import db
 from application.models.user import User
+from application.views.auth import auth_view
 
 
 def create_app():
@@ -35,6 +36,9 @@ def create_app():
 
     # データベースマイグレーション設定
     Migrate(app, db, directory=app.config['MIGRATIONS_DIR'])
+
+    # view登録
+    app.register_blueprint(auth_view)
 
     @app.route('/')
     def index():

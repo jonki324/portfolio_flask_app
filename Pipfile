@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 autopep8 = "*"
 flake8 = "*"
+pytest = "*"
 
 [packages]
 flask = "*"
@@ -24,3 +25,4 @@ init = "python run.py db init"
 migrate = "python run.py db migrate"
 upgrade = "python run.py db upgrade"
 downgrade = "python run.py db downgrade"
+test = "python -m pytest"
