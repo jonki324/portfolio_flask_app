@@ -1,5 +1,5 @@
-from application.froms.signup import SignupForm
-from application.froms.login import LoginForm
+from application.forms.signup import SignupForm
+from application.forms.login import LoginForm
 from application.models.user import User, db
 from flask import (Blueprint, current_app, flash,
                    redirect, render_template, request, url_for)
