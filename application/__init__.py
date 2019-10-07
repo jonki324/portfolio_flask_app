@@ -3,6 +3,7 @@ import logging.handlers
 import os
 from flask import Flask, render_template
 from flask_migrate import Migrate
+from flask_login import LoginManager
 from application.models.database import db
 from application.models.user import User
 from application.views.auth import auth_view
@@ -36,6 +37,16 @@ def create_app():
 
     # データベースマイグレーション設定
     Migrate(app, db, directory=app.config['MIGRATIONS_DIR'])
+
+    # ログインセッション管理設定
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth_view.login'
+    login_manager.login_message = 'ログインしてください'
+    login_manager.login_message_category = 'danger'
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.filter(User.id == user_id).first()
 
     # view登録
     app.register_blueprint(auth_view)

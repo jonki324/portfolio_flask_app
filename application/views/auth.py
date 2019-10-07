@@ -1,7 +1,9 @@
-from application.froms.signup import SignupForm
+from application.forms.signup import SignupForm
+from application.forms.login import LoginForm
 from application.models.user import User, db
 from flask import (Blueprint, current_app, flash,
                    redirect, render_template, request, url_for)
+from flask_login import login_user, logout_user, login_required
 
 auth_view = Blueprint('auth_view', __name__)
 
@@ -9,7 +11,29 @@ auth_view = Blueprint('auth_view', __name__)
 @auth_view.route('/login', methods=['GET', 'POST'])
 def login():
     current_app.logger.info('ログイン処理開始')
-    return render_template('login.html')
+    form = LoginForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        current_app.logger.info('ログイン認証処理開始')
+        user, authenticated = User.auth(db.session.query, form.email.data, form.password.data)
+        if authenticated:
+            current_app.logger.info('ログインユーザー: {}'.format(user))
+            login_user(user)
+            flash('ログインしました。', 'success')
+            return redirect(url_for('index'))
+
+        flash('メールアドレスかパスワードが違います', 'danger')
+
+    return render_template('login.html', form=form)
+
+
+@auth_view.route('/logout')
+@login_required
+def logout():
+    current_app.logger.info('ログアウト処理開始')
+    logout_user()
+    flash('ログアウトしました。', 'success')
+    return redirect(url_for('auth_view.login'))
 
 
 @auth_view.route('/signup', methods=['GET', 'POST'])

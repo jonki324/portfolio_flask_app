@@ -38,12 +38,10 @@
                         </span>
                     </h2>
                     {% from "helpers/_formhelpers.html" import render_field %}
-                    <form action="{{ url_for('auth_view.signup') }}", method="post">
-                        {# {{ form.csrf_token }}
-                        {{ render_field(form.name, placeholder="ニックネーム") }}
+                    <form action="{{ url_for('auth_view.login') }}", method="post">
+                        {{ form.csrf_token }}
                         {{ render_field(form.email, placeholder="email@mail.com") }}
-                        {{ render_field(form.password, placeholder="半角英数字") }}
-                        {{ render_field(form.confirm, placeholder="半角英数字") }} #}
+                        {{ render_field(form.password, placeholder="password") }}
                         <div class="form-group">
                             <button class="btn btn-primary btn-block">ログイン</button>
                         </div>
