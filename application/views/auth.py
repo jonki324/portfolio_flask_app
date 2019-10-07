@@ -1,4 +1,5 @@
 from application.froms.signup import SignupForm
+from application.froms.login import LoginForm
 from application.models.user import User, db
 from flask import (Blueprint, current_app, flash,
                    redirect, render_template, request, url_for)
@@ -9,7 +10,8 @@ auth_view = Blueprint('auth_view', __name__)
 @auth_view.route('/login', methods=['GET', 'POST'])
 def login():
     current_app.logger.info('ログイン処理開始')
-    return render_template('login.html')
+    form = LoginForm()
+    return render_template('login.html', form=form)
 
 
 @auth_view.route('/signup', methods=['GET', 'POST'])
