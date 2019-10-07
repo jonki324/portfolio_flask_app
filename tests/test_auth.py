@@ -42,3 +42,19 @@ def test_validate_signup(client, name, email, password, confirm, message):
         follow_redirects=True
     )
     assert message in rv.data.decode('utf-8')
+
+
+@pytest.mark.parametrize(('email', 'password', 'message'), (
+    # 正常系
+    ('email1@mail.com', 'pass', 'ログインしました'),
+    # メールチェック
+    ('', 'pass', '必須です'),
+    ('0123456789'*11 + '@amail.coma', 'pass', '120桁まで'),
+    ('email1mail.com', 'pass', '形式が違います'),
+    # パスワード
+    ('email1@mail.com', '', '必須です'),
+    ('email1@mail.com', '0123456789a'*3, '30桁まで'),
+))
+def test_validate_login(client, email, password, message):
+    rv = client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
+    assert message in rv.data.decode('utf-8')

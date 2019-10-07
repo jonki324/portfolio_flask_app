@@ -11,6 +11,13 @@ auth_view = Blueprint('auth_view', __name__)
 def login():
     current_app.logger.info('ログイン処理開始')
     form = LoginForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        current_app.logger.info('ログイン認証処理開始')
+        user, authenticated = User.auth(db.session.query, form.email.data, form.password.data)
+        flash('ログインしました。', 'success')
+        return redirect(url_for('index'))
+
     return render_template('login.html', form=form)
 
 

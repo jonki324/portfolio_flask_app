@@ -7,7 +7,7 @@ from application import create_app
 from application.models.database import create_db
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='module')
 def app():
     app = create_app()
 
