@@ -54,7 +54,15 @@ def test_validate_signup(client, name, email, password, confirm, message):
     # パスワード
     ('email1@mail.com', '', '必須です'),
     ('email1@mail.com', '0123456789a'*3, '30桁まで'),
+    # 異常系
+    ('email1x@mail.com', 'pass', 'メールアドレスかパスワードが違います'),
+    ('email1@mail.com', 'passx', 'メールアドレスかパスワードが違います'),
 ))
 def test_validate_login(client, email, password, message):
     rv = client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
     assert message in rv.data.decode('utf-8')
+
+
+def test_redirect_logout(client):
+    rv = client.get('/logout', follow_redirects=True)
+    assert 'ログインしてください' in rv.data.decode('utf-8')
