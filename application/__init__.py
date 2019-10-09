@@ -38,6 +38,10 @@ def create_app():
     # データベースマイグレーション設定
     Migrate(app, db, directory=app.config['MIGRATIONS_DIR'])
 
+    from application.models.blog_post import BlogPost
+    from application.models.bookmark_post import BookmarkPost
+    from application.models.profile import Profile
+
     # ログインセッション管理設定
     login_manager = LoginManager()
     login_manager.init_app(app)

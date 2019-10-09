@@ -5,9 +5,9 @@ from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationE
 
 
 class SignupForm(FlaskForm):
-    name = StringField('ニックネーム',
-                       validators=[DataRequired('必須です'),
-                                   Length(max=80, message='80桁までです')])
+    user_id = StringField('ユーザーID',
+                          validators=[DataRequired('必須です'),
+                                      Length(max=80, message='80桁までです')])
     email = StringField('メールアドレス',
                         validators=[DataRequired('必須です'),
                                     Length(max=120, message='120桁までです'),
@@ -19,8 +19,8 @@ class SignupForm(FlaskForm):
     confirm = PasswordField('パスワード（再入力）',
                             validators=[DataRequired('必須です')])
 
-    def validate_name(self, field):
-        if User.query.filter(User.name == field.data).count() > 0:
+    def validate_user_id(self, field):
+        if User.query.filter(User.user_id == field.data).count() > 0:
             raise ValidationError('すでに使われています')
 
     def validate_email(self, field):

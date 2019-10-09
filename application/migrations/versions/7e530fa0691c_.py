@@ -22,12 +22,12 @@ def upgrade():
                     sa.Column('created_at', sa.DateTime(), nullable=True),
                     sa.Column('modified_at', sa.DateTime(), nullable=True),
                     sa.Column('id', sa.Integer(), nullable=False),
-                    sa.Column('name', sa.String(length=80), nullable=False),
+                    sa.Column('user_id', sa.String(length=80), nullable=False),
                     sa.Column('email', sa.String(length=120), nullable=False),
                     sa.Column('_password', sa.String(length=80), nullable=False),
                     sa.PrimaryKeyConstraint('id'),
                     sa.UniqueConstraint('email'),
-                    sa.UniqueConstraint('name')
+                    sa.UniqueConstraint('user_id')
                     )
     # ### end Alembic commands ###
 

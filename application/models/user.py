@@ -4,6 +4,12 @@ from sqlalchemy.orm import synonym
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
+bookmark_users = db.Table('bookmark_users', Base.metadata,
+                          db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+                          db.Column('bookmark_user_id', db.Integer, db.ForeignKey('users.id'))
+                          )
+
+
 class User(UserMixin, Base):
     __tablename__ = 'users'
 
@@ -14,8 +20,11 @@ class User(UserMixin, Base):
 
     posts = db.relationship('BlogPost', back_populates='author')
     profile = db.relationship('Profile', back_populates='user', uselist=False)
-    bookmarks_user = db.relationship('BookmarkUser', back_populates='user')
-    bookmarks_post = db.relationship('BookmarkPost', back_populates='user')
+    bookmark_posts = db.relationship('BookmarkPost', back_populates='user')
+    bookmark_users = db.relationship('User',
+                                     secondary=bookmark_users,
+                                     primaryjoin=id == bookmark_users.c.user_id,
+                                     secondaryjoin=id == bookmark_users.c.bookmark_user_id)
 
     def _get_password(self):
         return self._password
