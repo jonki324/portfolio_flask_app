@@ -43,7 +43,7 @@ def signup():
 
     if request.method == 'POST' and form.validate_on_submit():
         current_app.logger.info('ユーザー登録処理開始')
-        user = User(name=form.name.data, email=form.email.data, password=form.password.data)
+        user = User(user_id=form.user_id.data, email=form.email.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('登録しました。ログインしてください。', 'success')

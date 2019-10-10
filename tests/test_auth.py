@@ -11,33 +11,33 @@ def test_show_login(client):
     assert 'ログイン' in rv.data.decode('utf-8')
 
 
-@pytest.mark.parametrize(('name', 'email', 'password', 'confirm', 'message'), (
+@pytest.mark.parametrize(('userid', 'email', 'password', 'confirm', 'message'), (
     # 正常登録
-    ('name1', 'email1@mail.com', 'pass', 'pass', '登録しました。'),
+    ('userid1', 'email1@mail.com', 'pass', 'pass', '登録しました。'),
     # 名前チェック
     ('', 'email2@mail.com', 'pass', 'pass', '必須です'),
     ('0123456789'*8 + 'a', 'email3@mail.com', 'pass', 'pass', '80桁まで'),
     ('0123456789'*8, 'email4@mail.com', 'pass', 'pass', '登録しました。'),
     # メールチェック
-    ('name5', '', 'pass', 'pass', '必須です'),
-    ('name6', 'email6mail.com', 'pass', 'pass', '形式が違います'),
-    ('name7', '0123456789'*11 + '@amail.coma', 'pass', 'pass', '120桁まで'),
-    ('name8', '0123456789'*11 + '@amail.com', 'pass', 'pass', '登録しました。'),
+    ('userid5', '', 'pass', 'pass', '必須です'),
+    ('userid6', 'email6mail.com', 'pass', 'pass', '形式が違います'),
+    ('userid7', '0123456789'*11 + '@amail.coma', 'pass', 'pass', '120桁まで'),
+    ('userid8', '0123456789'*11 + '@amail.com', 'pass', 'pass', '登録しました。'),
     # パスワードチェック
-    ('name9', 'email9@mail.com', '', 'pass', '必須です'),
-    ('name10', 'email10@mail.com', '0123456789a'*3, 'pass', '30桁まで'),
-    ('name11', 'email11@mail.com', '0123456789'*3, '0123456789'*3, '登録しました。'),
-    ('name12', 'email12@mail.com', 'pass', 'passa', '一致していません'),
+    ('userid9', 'email9@mail.com', '', 'pass', '必須です'),
+    ('userid10', 'email10@mail.com', '0123456789a'*3, 'pass', '30桁まで'),
+    ('userid11', 'email11@mail.com', '0123456789'*3, '0123456789'*3, '登録しました。'),
+    ('userid12', 'email12@mail.com', 'pass', 'passa', '一致していません'),
     # 再入力チェック
-    ('name13', 'email13@mail.com', 'pass', '', '必須です'),
+    ('userid13', 'email13@mail.com', 'pass', '', '必須です'),
     # ユニークチェック
-    ('name1', 'email14@mail.com', 'pass', 'pass', 'すでに使われています'),
-    ('name15', 'email1@mail.com', 'pass', 'pass', 'すでに使われています'),
+    ('userid1', 'email14@mail.com', 'pass', 'pass', 'すでに使われています'),
+    ('userid15', 'email1@mail.com', 'pass', 'pass', 'すでに使われています'),
 ))
-def test_validate_signup(client, name, email, password, confirm, message):
+def test_validate_signup(client, userid, email, password, confirm, message):
     rv = client.post(
         '/signup',
-        data={'name': name, 'password': password, 'email': email,
+        data={'user_id': userid, 'password': password, 'email': email,
               'password': password, 'confirm': confirm},
         follow_redirects=True
     )
