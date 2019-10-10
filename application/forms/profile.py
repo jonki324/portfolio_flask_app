@@ -13,4 +13,4 @@ class ProfileForm(FlaskForm):
     comment = TextAreaField('コメント',
                             validators=[Length(max=200, message='200桁までです')])
     icon = FileField('アイコン',
-                     validators=[FileAllowed(images, message='イメージファイルのみです')])
+                     validators=[FileAllowed(['jpg', 'png'], message='イメージファイルのみです')])

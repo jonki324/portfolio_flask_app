@@ -38,7 +38,7 @@
                         </span>
                     </h2> #}
                     {% from "helpers/_formhelpers.html" import render_field %}
-                    <form action="{{ url_for('profile_view.profile') }}", method="post">
+                    <form action="{{ url_for('profile_view.profile') }}" method="post" enctype="multipart/form-data">
                         {{ form.csrf_token }}
                         {{ render_field(form.icon, placeholder="アイコン") }}
                         {{ render_field(form.nickname, placeholder="ニックネーム") }}

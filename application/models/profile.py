@@ -12,7 +12,7 @@ class Profile(Base):
 
     user = db.relationship('User', back_populates='profile')
 
-    def __init__(self, user_id, nickname=None, comment=None, icon=None):
+    def __init__(self, user_id=None, nickname=None, comment=None, icon=None):
         self.user_id = user_id
         self.nickname = nickname
         self.comment = comment
