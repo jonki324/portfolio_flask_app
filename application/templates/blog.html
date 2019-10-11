@@ -44,6 +44,9 @@
                 {{ render_profile(profile.nickname, 'ニックネーム') }}
                 {{ render_profile(profile.comment, 'コメント') }}
             </div>
+            <div>
+                <a href="{{ url_for('post_view.add') }}">記事投稿</a>
+            </div>
         </div>
     </div>
 </div>

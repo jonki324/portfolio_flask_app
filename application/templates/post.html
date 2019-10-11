@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+<div class="container mb-5">
+    <div class="row mt-5">
+        <div class="col-md-8 offset-md-2 text-center">
+            {# <span style="font-size: 80px; color: Dodgerblue;">
+                <i class="fab fa-blogger"></i>
+            </span> #}
+            <h1>{% block title %}記事投稿{% endblock %}</h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="row mb-3">
+            <div class="col-md-8 offset-md-2">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card bg-light">
+                <div class="card-body">
+                    {% from "helpers/_formhelpers.html" import render_field %}
+                    <form action="{{ url_for('post_view.add') }}" method="post" enctype="multipart/form-data">
+                        {{ form.csrf_token }}
+                        <div class="form-group">
+                            {{ form.image.label }}
+                            <span style="font-size: 80px; color: Dodgerblue;">
+                                <i class="fas fa-image"></i>
+                            </span>
+                            {{ form.image() }}
+                            {{ form.is_img_saved() }}
+                        </div>
+                        {{ render_field(form.title, placeholder="タイトル") }}
+                        {{ render_field(form.body, placeholder="コメント") }}
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block">記事を投稿する</button>
+                        </div>
+                        <div class="form-group text-center">
+                            <a href="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}">マイブログへ</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
