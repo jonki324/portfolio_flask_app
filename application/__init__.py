@@ -1,3 +1,4 @@
+import base64
 import logging
 import logging.handlers
 import os
@@ -60,6 +61,12 @@ def create_app():
     app.register_blueprint(profile_view)
     app.register_blueprint(blog_view)
     app.register_blueprint(post_view)
+
+    @app.template_filter('base64')
+    def base64_filter(val_bin):
+        val_base64 = base64.b64encode(val_bin)
+        val_str = val_base64.decode("ascii")
+        return val_str
 
     @app.route('/')
     def index():
