@@ -15,3 +15,9 @@
     {% endif %}
 </div>
 {% endmacro %}
+
+{% macro render_profile(field, title) %}
+{% if field %}
+    <div>{{ title }} : {{ field }}</div>
+{% endif %}
+{% endmacro %}

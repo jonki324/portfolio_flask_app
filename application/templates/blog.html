@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+<div class="container mb-5">
+    <div class="row mt-5">
+        <div class="col-md-8 offset-md-2 text-center">
+            {# <span style="font-size: 80px; color: Dodgerblue;">
+                <i class="fab fa-blogger"></i>
+            </span> #}
+            <h1>{% block title %}ブログ{% endblock %}</h1>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="row mb-3">
+            <div class="col-md-8 offset-md-2">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endwith %}
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <a href="{{ url_for('profile_view.profile') }}">プロフィール編集</a>
+            <div>
+                {% if profile.icon %}
+                <img src="data:image/jpeg;base64,{{ profile.icon }}">
+                {% else %}
+                <span style="font-size: 80px; color: Dodgerblue;">
+                    <i class="far fa-user"></i>
+                </span>
+                {% endif %}
+                {% from "helpers/_formhelpers.html" import render_profile %}
+                {{ render_profile(profile.user_id, 'ユーザーID') }}
+                {{ render_profile(profile.nickname, 'ニックネーム') }}
+                {{ render_profile(profile.comment, 'コメント') }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

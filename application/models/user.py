@@ -34,10 +34,11 @@ class User(UserMixin, Base):
     password_descriptor = property(_get_password, _set_password)
     password = synonym('_password', descriptor=password_descriptor)
 
-    def __init__(self, user_id, email, password):
+    def __init__(self, user_id, email, password, profile):
         self.user_id = user_id
         self.email = email
         self.password = password
+        self.profile = profile
 
     def __repr__(self):
         return '<User id: {}, user_id: {}, email: {}>'.format(self.id, self.user_id, self.email)

@@ -1,6 +1,7 @@
 from application.forms.signup import SignupForm
 from application.forms.login import LoginForm
 from application.models.user import User, db
+from application.models.profile import Profile
 from flask import (Blueprint, current_app, flash,
                    redirect, render_template, request, url_for)
 from flask_login import login_user, logout_user, login_required
@@ -43,7 +44,8 @@ def signup():
 
     if request.method == 'POST' and form.validate_on_submit():
         current_app.logger.info('ユーザー登録処理開始')
-        user = User(user_id=form.user_id.data, email=form.email.data, password=form.password.data)
+        user = User(user_id=form.user_id.data, email=form.email.data,
+                    password=form.password.data, profile=Profile())
         db.session.add(user)
         db.session.commit()
         flash('登録しました。ログインしてください。', 'success')
