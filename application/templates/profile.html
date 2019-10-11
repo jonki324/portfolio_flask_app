@@ -32,22 +32,29 @@
         <div class="col-md-8 offset-md-2">
             <div class="card bg-light">
                 <div class="card-body">
-                    {# <h2 class="card-title text-center">
-                        <span style="font-size: 60px; color: Dodgerblue;">
-                            <i class="far fa-user"></i>
-                        </span>
-                    </h2> #}
                     {% from "helpers/_formhelpers.html" import render_field %}
                     <form action="{{ url_for('profile_view.profile') }}" method="post" enctype="multipart/form-data">
                         {{ form.csrf_token }}
-                        {{ render_field(form.icon, placeholder="アイコン") }}
+                        <div class="form-group">
+                            {{ form.icon.label }}
+                            {{ form.icon_del() }}
+                            {{ form.icon_del.label }}
+                            {% if icon %}
+                            <img src="data:image/jpeg;base64,{{ icon }}">
+                            {% else %}
+                            <span style="font-size: 80px; color: Dodgerblue;">
+                                <i class="far fa-user"></i>
+                            </span>
+                            {% endif %}
+                            {{ form.icon() }}
+                        </div>
                         {{ render_field(form.nickname, placeholder="ニックネーム") }}
                         {{ render_field(form.comment, placeholder="コメント") }}
                         <div class="form-group">
                             <button class="btn btn-primary btn-block">プロフィール保存</button>
                         </div>
                         <div class="form-group text-center">
-                            <a href="{{ url_for('index') }}">マイページへ</a>
+                            <a href="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}">マイブログへ</a>
                         </div>
                     </form>
                 </div>

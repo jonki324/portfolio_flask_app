@@ -8,6 +8,7 @@ from application.models.database import db
 from application.models.user import User
 from application.views.auth import auth_view
 from application.views.profile import profile_view
+from application.views.blog import blog_view
 
 
 def create_app():
@@ -56,6 +57,7 @@ def create_app():
     # view登録
     app.register_blueprint(auth_view)
     app.register_blueprint(profile_view)
+    app.register_blueprint(blog_view)
 
     @app.route('/')
     def index():
