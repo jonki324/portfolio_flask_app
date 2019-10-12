@@ -55,6 +55,7 @@
                         <h5 class="card-title">{{ post.author.user_id }}</h5>
                         <h6 class="card-title">{{ post.title }}</h6>
                         <p class="card-text">{{ post.body }}</p>
+                        <p class="card-text"><a href="{{ url_for('post_view.upd', post_id=post.id) }}">更新</a></p>
                     </div>
                 </div>
                 {% endfor %}
