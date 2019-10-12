@@ -5,6 +5,7 @@ import os
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 from application.models.database import db
 from application.models.user import User
 from application.views.auth import auth_view
@@ -55,6 +56,10 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.filter(User.id == user_id).first()
+
+    # CSRF設定
+    csrf = CSRFProtect()
+    csrf.init_app(app)
 
     # view登録
     app.register_blueprint(auth_view)

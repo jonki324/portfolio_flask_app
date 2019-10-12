@@ -61,3 +61,23 @@ def upd(post_id):
         return redirect(url_for('blog_view.blog', user_id=current_user.user_id))
 
     return render_template('post.html', form=form)
+
+
+@post_view.route('/post/rmv/<post_id>', methods=['GET', 'POST'])
+@login_required
+def rmv(post_id):
+    current_app.logger.info('記事削除処理開始')
+
+    if request.method == 'POST':
+        try:
+            user, post = db.session.query(User, BlogPost).filter(db.and_(User.id == current_user.id,
+                                                                         BlogPost.id == post_id)).first()
+        except Exception:
+            flash('記事がありません。', 'danger')
+            return redirect(url_for('blog_view.blog', user_id=current_user.user_id))
+
+        db.session.delete(post)
+        db.session.commit()
+        flash('削除しました。', 'success')
+
+    return redirect(url_for('blog_view.blog', user_id=current_user.user_id))
