@@ -13,8 +13,7 @@ class BlogPost(Base):
     author = db.relationship('User', back_populates='posts')
     users = db.relationship('BookmarkPost', back_populates='bookmark_posts')
 
-    def __init__(self, author_id, title, body, image):
-        self.author_id = author_id
+    def __init__(self, title, body, image):
         self.title = title
         self.body = body
         self.image = image

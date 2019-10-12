@@ -33,7 +33,7 @@
             <a href="{{ url_for('profile_view.profile') }}">プロフィール編集</a>
             <div>
                 {% if profile.icon %}
-                <img src="data:image/jpeg;base64,{{ profile.icon }}">
+                <img src="data:image/jpeg;base64,{{ profile.icon | base64 }}">
                 {% else %}
                 <span style="font-size: 80px; color: Dodgerblue;">
                     <i class="far fa-user"></i>
@@ -43,6 +43,28 @@
                 {{ render_profile(profile.user_id, 'ユーザーID') }}
                 {{ render_profile(profile.nickname, 'ニックネーム') }}
                 {{ render_profile(profile.comment, 'コメント') }}
+            </div>
+            <div>
+                <a href="{{ url_for('post_view.add') }}">記事投稿</a>
+            </div>
+            <div>
+                {% for post in posts %}
+                <div class="card">
+                    <img class="card-img-top" src="data:image/jpeg;base64,{{ post.image | base64 }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.author.user_id }}</h5>
+                        <h6 class="card-title">{{ post.title }}</h6>
+                        <p class="card-text">{{ post.body }}</p>
+                        <p class="card-text"><a href="{{ url_for('post_view.upd', post_id=post.id) }}">更新</a></p>
+                        <p class="card-text">
+                            <form action="{{ url_for('post_view.rmv', post_id=post.id) }}" method="post">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button class="btn btn-danger">削除</button>
+                            </form>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

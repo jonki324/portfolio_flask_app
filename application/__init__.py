@@ -1,14 +1,17 @@
+import base64
 import logging
 import logging.handlers
 import os
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 from application.models.database import db
 from application.models.user import User
 from application.views.auth import auth_view
 from application.views.profile import profile_view
 from application.views.blog import blog_view
+from application.views.post import post_view
 
 
 def create_app():
@@ -54,10 +57,21 @@ def create_app():
     def load_user(user_id):
         return User.query.filter(User.id == user_id).first()
 
+    # CSRF設定
+    csrf = CSRFProtect()
+    csrf.init_app(app)
+
     # view登録
     app.register_blueprint(auth_view)
     app.register_blueprint(profile_view)
     app.register_blueprint(blog_view)
+    app.register_blueprint(post_view)
+
+    @app.template_filter('base64')
+    def base64_filter(val_bin):
+        val_base64 = base64.b64encode(val_bin)
+        val_str = val_base64.decode("ascii")
+        return val_str
 
     @app.route('/')
     def index():
