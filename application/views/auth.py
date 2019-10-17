@@ -21,7 +21,7 @@ def login():
             current_app.logger.info('ログインユーザー: {}'.format(user))
             login_user(user)
             flash('ログインしました。', 'success')
-            return redirect(url_for('index'))
+            return redirect(url_for('home_view.index'))
 
         flash('メールアドレスかパスワードが違います', 'danger')
 

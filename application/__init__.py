@@ -2,7 +2,7 @@ import base64
 import logging
 import logging.handlers
 import os
-from flask import Flask, render_template
+from flask import Flask
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
@@ -12,6 +12,7 @@ from application.views.auth import auth_view
 from application.views.profile import profile_view
 from application.views.blog import blog_view
 from application.views.post import post_view
+from application.views.home import home_view
 
 
 def create_app():
@@ -66,16 +67,12 @@ def create_app():
     app.register_blueprint(profile_view)
     app.register_blueprint(blog_view)
     app.register_blueprint(post_view)
+    app.register_blueprint(home_view)
 
     @app.template_filter('base64')
     def base64_filter(val_bin):
         val_base64 = base64.b64encode(val_bin)
         val_str = val_base64.decode("ascii")
         return val_str
-
-    @app.route('/')
-    def index():
-        app.logger.info('index処理開始')
-        return render_template('index.html')
 
     return app

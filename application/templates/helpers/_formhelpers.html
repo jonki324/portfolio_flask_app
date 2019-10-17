@@ -21,3 +21,21 @@
     <div>{{ title }} : {{ field }}</div>
 {% endif %}
 {% endmacro %}
+
+{% macro render_post(post) %}
+<div class="card">
+    <img class="card-img-top" src="data:image/jpeg;base64,{{ post.image | base64 }}">
+    <div class="card-body">
+        <h5 class="card-title">{{ post.author.user_id }}</h5>
+        <h6 class="card-title">{{ post.title }}</h6>
+        <p class="card-text">{{ post.body }}</p>
+{#        <p class="card-text"><a href="{{ url_for('post_view.upd', post_id=post.id) }}">更新</a></p>#}
+{#        <p class="card-text">#}
+{#            <form action="{{ url_for('post_view.rmv', post_id=post.id) }}" method="post">#}
+{#                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">#}
+{#                <button class="btn btn-danger">削除</button>#}
+{#            </form>#}
+{#        </p>#}
+    </div>
+</div>
+{% endmacro %}
