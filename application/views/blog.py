@@ -20,7 +20,7 @@ def blog(user_id):
 
     profile = user.profile
 
-    if keyword != '' and form.validate_on_submit():
+    if keyword != '':
         posts = db.session.query(BlogPost).filter(BlogPost.author_id == user.id,
                                                   db.or_(BlogPost.title.like('%{}%'.format(keyword)),
                                                          BlogPost.body.like('%{}%'.format(keyword)))).\

@@ -61,7 +61,7 @@
                 <a href="{{ url_for('post_view.add') }}">記事投稿</a>
             </div>
             <div>
-                <form action="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}" method="get" class="form-inline">
+                <form action="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}" method="get">
                     <div class="input-group">
                         {{ form.keyword(class="form-control", placeholder="キーワード") }}
                         <div class="input-group-append">
