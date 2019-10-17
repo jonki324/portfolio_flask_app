@@ -16,6 +16,7 @@ flask-script = "*"
 flask-wtf = "*"
 flask-login = "*"
 flask-uploads = "*"
+flask-paginate = "*"
 
 [requires]
 python_version = "3.7"
