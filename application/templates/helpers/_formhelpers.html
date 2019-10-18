@@ -22,7 +22,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro render_post(post, is_edit=False) %}
+{% macro render_post(post, is_edit=False, is_login=False) %}
 <div class="card">
     <img class="card-img-top" src="data:image/jpeg;base64,{{ post.image | base64 }}">
     <div class="card-body">
@@ -37,6 +37,16 @@
                 <button class="btn btn-danger">削除</button>
             </form>
         </p>
+        {% endif %}
+        {% if is_login %}
+        <p class="card-text">
+            <button type="button" onclick="addBookmarkPost({{ post.id }})" class="btn btn-warning btn-sm{% if post.users | length > 0 %} active{% endif %}" data-toggle="button" aria-pressed="{{ post.users | length > 0 }}" autocomplete="off">
+                ブックマーク <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
+            </button>
+            <input type="hidden" name="del_flg" id="del_flg_{{ post.id }}" value="{{ post.users | length > 0 }}">
+        </p>
+        {% else %}
+            <span class="badge badge-warning">ブックマーク {{ post.users | length }}</span>
         {% endif %}
     </div>
 </div>
