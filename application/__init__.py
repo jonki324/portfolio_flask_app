@@ -13,6 +13,7 @@ from application.views.profile import profile_view
 from application.views.blog import blog_view
 from application.views.post import post_view
 from application.views.home import home_view
+from application.views.bookmark import bookmark_view
 
 
 def create_app():
@@ -68,11 +69,20 @@ def create_app():
     app.register_blueprint(blog_view)
     app.register_blueprint(post_view)
     app.register_blueprint(home_view)
+    app.register_blueprint(bookmark_view)
 
     @app.template_filter('base64')
     def base64_filter(val_bin):
         val_base64 = base64.b64encode(val_bin)
         val_str = val_base64.decode("ascii")
         return val_str
+
+    @app.after_request
+    def add_header(r):
+        r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        r.headers["Pragma"] = "no-cache"
+        r.headers["Expires"] = "0"
+        r.headers['Cache-Control'] = 'public, max-age=0'
+        return r
 
     return app

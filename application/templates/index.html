@@ -37,9 +37,10 @@
         {% from "helpers/_formhelpers.html" import render_post %}
         {% for post in posts %}
             <div class="col-md-3">
-            {{ render_post(post) }}
+            {{ render_post(post, is_login=current_user.is_authenticated) }}
             </div>
         {% endfor %}
+        <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     </div>
 {{ pagination.links }}
 </div>

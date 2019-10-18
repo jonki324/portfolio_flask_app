@@ -6,6 +6,7 @@
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/toastr.min.css') }}">
     <title>{% block title %}{% endblock %} - Mini Blog</title>
 </head>
 <body>
@@ -47,6 +48,10 @@
 <footer></footer>
 <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toastr.min.js') }}"></script>
+<script>
+    $SCRIPT_ROOT = '{{ url_for('home_view.index', _external=True) }}';
+</script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
