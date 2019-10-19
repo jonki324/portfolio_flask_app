@@ -4,6 +4,7 @@ from application.models.blog_post import BlogPost
 from flask import (Blueprint, current_app, flash,
                    redirect, render_template, request, url_for)
 from flask_paginate import Pagination, get_page_parameter
+from flask_login import current_user
 
 home_view = Blueprint('home_view', __name__)
 
@@ -28,4 +29,9 @@ def index():
     res = posts[(page - 1) * 12: page * 12]
     pagination = Pagination(page=page, total=len(posts), per_page=12, css_framework='bootstrap4', alignment='center')
 
-    return render_template('index.html', form=form, posts=res, pagination=pagination)
+    bookmarks = []
+    if current_user.is_authenticated:
+        cur_user = db.session.query(User).filter(User.id == current_user.id).first()
+        bookmarks = cur_user.bookmark_posts
+    print(bookmarks)
+    return render_template('index.html', form=form, bookmarks=bookmarks, posts=res, pagination=pagination)
