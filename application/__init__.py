@@ -77,6 +77,13 @@ def create_app():
         val_str = val_base64.decode("ascii")
         return val_str
 
+    @app.template_filter('is_bookmarked')
+    def is_bookmarked_filter(post, bookmarks):
+        for bookmark in bookmarks:
+            if post.id == bookmark.bookmark_post_id:
+                return True
+        return False
+
     @app.after_request
     def add_header(r):
         r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"

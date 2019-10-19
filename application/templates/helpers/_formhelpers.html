@@ -22,7 +22,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro render_post(post, is_edit=False, is_login=False) %}
+{% macro render_post(post, bookmarks=[], is_edit=False, is_login=False) %}
 <div class="card">
     <img class="card-img-top" src="data:image/jpeg;base64,{{ post.image | base64 }}">
     <div class="card-body">
@@ -40,10 +40,10 @@
         {% endif %}
         {% if is_login %}
         <p class="card-text">
-            <button type="button" onclick="addBookmarkPost({{ post.id }})" class="btn btn-warning btn-sm{% if post.users | length > 0 %} active{% endif %}" data-toggle="button" aria-pressed="{{ post.users | length > 0 }}" autocomplete="off">
+            <button type="button" onclick="addBookmarkPost({{ post.id }})" class="btn btn-warning btn-sm{% if post | is_bookmarked(bookmarks) %} active{% endif %}" data-toggle="button" aria-pressed="{{ post | is_bookmarked(bookmarks) }}" autocomplete="off">
                 ブックマーク <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
             </button>
-            <input type="hidden" name="del_flg" id="del_flg_{{ post.id }}" value="{{ post.users | length > 0 }}">
+            <input type="hidden" name="del_flg" id="del_flg_{{ post.id }}" value="{{ post | is_bookmarked(bookmarks) }}">
         </p>
         {% else %}
             <span class="badge badge-warning">ブックマーク {{ post.users | length }}</span>
