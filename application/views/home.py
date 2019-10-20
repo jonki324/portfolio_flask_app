@@ -33,5 +33,5 @@ def index():
     if current_user.is_authenticated:
         cur_user = db.session.query(User).filter(User.id == current_user.id).first()
         bookmarks = cur_user.bookmark_posts
-    print(bookmarks)
+
     return render_template('index.html', form=form, bookmarks=bookmarks, posts=res, pagination=pagination)
