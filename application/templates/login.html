@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block header %}
-<div class="container mb-5">
-    <div class="row mt-5">
-        <div class="col-md-6 offset-md-3 text-center">
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-4 offset-md-4 text-center">
             <span style="font-size: 80px; color: Dodgerblue;">
                 <i class="fab fa-blogger"></i>
             </span>
-            <h1>{% block title %}ログイン{% endblock %}</h1>
+            <h1>Please {% block title %}login{% endblock %}</h1>
         </div>
     </div>
 </div>
@@ -18,7 +18,7 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         <div class="row mb-3">
-            <div class="col-md-6 offset-md-3">
+            <div class="col-md-4 offset-md-4">
                 {% for category, message in messages %}
                     <div class="alert alert-{{ category }}" role="alert">
                         {{ message }}
@@ -29,7 +29,7 @@
     {% endif %}
 {% endwith %}
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-4 offset-md-4">
             <div class="card bg-light">
                 <div class="card-body">
                     <h2 class="card-title text-center">
@@ -38,7 +38,7 @@
                         </span>
                     </h2>
                     {% from "helpers/_formhelpers.html" import render_field %}
-                    <form action="{{ url_for('auth_view.login') }}", method="post">
+                    <form action="{{ url_for('auth_view.login') }}" method="post">
                         {{ form.csrf_token }}
                         {{ render_field(form.email, placeholder="email@mail.com") }}
                         {{ render_field(form.password, placeholder="password") }}
@@ -46,7 +46,7 @@
                             <button class="btn btn-primary btn-block">ログイン</button>
                         </div>
                         <div class="form-group text-center">
-                            <a href="{{ url_for('auth_view.signup') }}">サインアップへ</a>
+                            <a href="{{ url_for('auth_view.signup') }}">新規登録はこちらから</a>
                         </div>
                     </form>
                 </div>

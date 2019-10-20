@@ -1,7 +1,15 @@
 {% extends 'layout.html' %}
 
+{% block title %}
+Home
+{% endblock %}
+
 {% block header %}
-    <h1>{% block title %}Mini-Blog{% endblock %}</h1>
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center">
+        <h1>Mini Blog</h1>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -19,7 +27,7 @@
     {% endif %}
 {% endwith %}
 <div class="container">
-    <div class="row">
+    <div class="row mb-5">
         <div class="col-md-6 offset-md-3">
             <form action="{{ url_for('home_view.index') }}" method="get">
                 <div class="input-group">
@@ -33,15 +41,15 @@
             </form>
         </div>
     </div>
-    <div class="row mt-5 mb-3">
+    <div class="row mb-3">
         {% from "helpers/_formhelpers.html" import render_post %}
         {% for post in posts %}
-            <div class="col-md-3">
+            <div class="col-md-3 mb-4">
             {{ render_post(post, bookmarks=bookmarks, is_login=current_user.is_authenticated) }}
             </div>
         {% endfor %}
         <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     </div>
-{{ pagination.links }}
+    {{ pagination.links }}
 </div>
 {% endblock %}
