@@ -84,6 +84,9 @@
                 </form>
             </div>
             <div>
+                <a href="{{ url_for('blog_view.blog', user_id=user.user_id, bookmark=True) }}">ブックマーク記事</a>
+            </div>
+            <div>
                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#bmk-users" aria-expanded="false">
                     ブックマークユーザー
                 </button>

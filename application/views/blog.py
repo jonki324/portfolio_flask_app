@@ -13,6 +13,7 @@ blog_view = Blueprint('blog_view', __name__)
 def blog(user_id):
     current_app.logger.info('マイブログ処理開始')
 
+    bookmark_search = request.args.get('bookmark', default=False)
     keyword = request.args.get('keyword', default='')
 
     form = BlogForm(keyword=keyword)
@@ -23,7 +24,12 @@ def blog(user_id):
 
     bmk_users = user.bookmark_users
 
-    if keyword != '':
+    if bookmark_search:
+        posts = []
+        bmk_posts = user.bookmark_posts
+        for post in bmk_posts:
+            posts.append(post.bookmark_posts)
+    elif keyword != '':
         posts = db.session.query(BlogPost).filter(BlogPost.author_id == user.id,
                                                   db.or_(BlogPost.title.like('%{}%'.format(keyword)),
                                                          BlogPost.body.like('%{}%'.format(keyword)))).\
