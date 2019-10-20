@@ -13,6 +13,7 @@ blog_view = Blueprint('blog_view', __name__)
 def blog(user_id):
     current_app.logger.info('マイブログ処理開始')
 
+    bookmark_search = request.args.get('bookmark', default=False)
     keyword = request.args.get('keyword', default='')
 
     form = BlogForm(keyword=keyword)
@@ -21,7 +22,14 @@ def blog(user_id):
 
     profile = user.profile
 
-    if keyword != '':
+    bmk_users = user.bookmark_users
+
+    if bookmark_search:
+        posts = []
+        bmk_posts = user.bookmark_posts
+        for post in bmk_posts:
+            posts.append(post.bookmark_posts)
+    elif keyword != '':
         posts = db.session.query(BlogPost).filter(BlogPost.author_id == user.id,
                                                   db.or_(BlogPost.title.like('%{}%'.format(keyword)),
                                                          BlogPost.body.like('%{}%'.format(keyword)))).\
@@ -46,8 +54,6 @@ def blog(user_id):
     bookmark_info['bookmark_count'] = bookmark_count
 
     if current_user.is_authenticated and current_user.user_id != user_id:
-        # cur_user = db.session.query(User).filter(User.user_id == current_user.user_id).first()
-        # is_bookmark = cur_user.bookmark_users.filter(bookmark_users.c.bookmark_user_id == user_id).count()
         stmt = db.select([db.func.count(bookmark_users.c.bookmark_user_id).label('cnt')]).where(
             db.and_(bookmark_users.c.bookmark_user_id == user.id, bookmark_users.c.user_id == current_user.id))
         result = db.engine.execute(stmt)
@@ -55,4 +61,4 @@ def blog(user_id):
 
         bookmark_info['is_bookmark'] = bool(is_bookmark)
 
-    return render_template('blog.html', form=form, user=user, bookmarks=bookmarks, bookmark_info=bookmark_info, profile=profile, posts=res, pagination=pagination)
+    return render_template('blog.html', form=form, user=user, bmk_users=bmk_users, bookmarks=bookmarks, bookmark_info=bookmark_info, profile=profile, posts=res, pagination=pagination)
