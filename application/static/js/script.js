@@ -1,5 +1,5 @@
 $(function() {
-
+    $("#icon-dropzone").dropzone();
 });
 
 function addBookmarkPost(post_id) {
@@ -62,4 +62,10 @@ function addBookmarkUser(user_id) {
 
 function toBoolean(str) {
     return str.toLowerCase() === 'true';
+}
+
+function showModal(post_id) {
+    let src_org = $(`#post-img-${post_id}`).attr('src');
+    $('#postModalImg').attr('src', src_org);
+    $('#postModal').modal('show');
 }

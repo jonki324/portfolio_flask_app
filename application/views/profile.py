@@ -17,8 +17,9 @@ def profile():
     icon_bin = user.profile.icon
     icon = None
     if icon_bin:
-        icon = base64.b64encode(icon_bin)
-        icon = icon.decode("ascii")
+        icon = icon_bin
+        # icon = base64.b64encode(icon_bin)
+        # icon = icon.decode("ascii")
 
     form = ProfileForm(obj=user.profile)
 

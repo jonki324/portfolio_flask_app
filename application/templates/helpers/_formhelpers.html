@@ -23,11 +23,12 @@
 {% endmacro %}
 
 {% macro render_post(post, bookmarks=[], is_edit=False, is_login=False) %}
-<div class="card">
-    <img class="card-img-top" src="data:image/jpeg;base64,{{ post.image | base64 }}">
+<div class="card shadow-lg">
+    <img id="post-img-{{ post.id }}" class="card-img-top" onclick="showModal({{ post.id }})" src="data:image/jpeg;base64,{{ post.image | base64 }}">
     <div class="card-body">
         <h6 class="card-title">
-            <p>
+            <p class="text-muted">
+                {{ post.created_at | format_date }} by
                 <a href="{{ url_for('blog_view.blog', user_id=post.author.user_id) }}">
                     <i class="far fa-user-circle"></i> {{ post.author.user_id | safe }}
                 </a>
@@ -38,18 +39,18 @@
         </h6>
         <p class="card-text">
             <p>{{ post.body | safe }}</p>
-            <p class="mt-5">
+            <div class="mt-5 d-flex justify-content-between align-items-center">
                 {% if is_login %}
                 <button type="button" onclick="addBookmarkPost({{ post.id }})" class="btn btn-warning btn-sm{% if post | is_bookmarked(bookmarks) %} active{% endif %}" data-toggle="button" aria-pressed="{{ post | is_bookmarked(bookmarks) }}" autocomplete="off">
                     <i class="far fa-star"></i> <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
                 </button>
                 <input type="hidden" name="del_flg" id="del_flg_{{ post.id }}" value="{{ post | is_bookmarked(bookmarks) }}">
                 {% else %}
-                <span class="badge badge-warning"><i class="far fa-star"></i> {{ post.users | length }}</span>
+                <span class="badge badge-warning">
+                    <i class="far fa-star"></i> Bookmark <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
+                </span>
                 {% endif %}
-            </p>
-            {% if is_edit %}
-            <p class="mt-2">
+                {% if is_edit %}
                 <form class="text-right" action="{{ url_for('post_view.rmv', post_id=post.id) }}" method="post">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="btn-group">
@@ -61,9 +62,21 @@
                         </button>
                     </div>
                 </form>
-            </p>
-            {% endif %}
+                {% endif %}
+            </div>
         </p>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_modal() %}
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <img src="" id="postModalImg" class="img-fluid">
+            </div>
+        </div>
     </div>
 </div>
 {% endmacro %}

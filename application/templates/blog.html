@@ -1,80 +1,85 @@
 {% extends 'layout.html' %}
 
 {% block header %}
-<div class="container mb-5">
-    <div class="row mt-5">
-        <div class="col-md-8 offset-md-2 text-center">
-            {# <span style="font-size: 80px; color: Dodgerblue;">
-                <i class="fab fa-blogger"></i>
-            </span> #}
-            <h1>{% block title %}ブログ{% endblock %}</h1>
-        </div>
+<div class="jumbotron jumbotron-fluid mb-3">
+    <div class="container text-center">
+        <h1>{% block title %}{{ user.user_id }}{% endblock %} Blog</h1>
     </div>
 </div>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <div class="row mb-3">
-            <div class="col-md-8 offset-md-2">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
-{% endwith %}
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-9">
             <div class="row mb-3">
                 {% from "helpers/_formhelpers.html" import render_post %}
                 {% for post in posts %}
-                <div class="col-md-4">
-                    {{ render_post(post, bookmarks=bookmarks, is_edit=True, is_login=current_user.is_authenticated) }}
+                <div class="col-md-4 mb-4">
+                    {{ render_post(post, bookmarks=bookmarks, is_edit=current_user.is_authenticated and current_user.user_id == user.user_id, is_login=current_user.is_authenticated) }}
                 </div>
                 {% endfor %}
                 <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
             </div>
             {{ pagination.links }}
         </div>
-        <div class="col-md-2">
-            <div>
-                {% if profile.icon %}
-                <img src="data:image/jpeg;base64,{{ profile.icon | base64 }}" class="img-thumbnail">
-                {% else %}
-                <span style="font-size: 80px; color: Dodgerblue;">
-                    <i class="far fa-user"></i>
-                </span>
-                {% endif %}
-                {% from "helpers/_formhelpers.html" import render_profile %}
-                {{ render_profile(user.user_id, 'ユーザーID') }}
-                {{ render_profile(profile.nickname, 'ニックネーム') }}
-                {{ render_profile(profile.comment, 'コメント') }}
+        <div class="col-md-3">
+        {% from "helpers/_formhelpers.html" import render_profile %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                {% if profile.icon %}
+                                <img src="data:image/jpeg;base64,{{ profile.icon | base64 }}" class="rounded icon">
+                                {% else %}
+                                <span style="font-size: 60px; color: Dodgerblue;">
+                                    <i class="far fa-user"></i>
+                                </span>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                ID : {{ user.user_id }}
+                            </div>
+                        </div>
+                        {% if profile.nickname and profile.comment %}
+                        <div class="row mt-3">
+                            <div class="col">
+                                {{ render_profile(profile.nickname, 'ニックネーム') }}
+                                {{ render_profile(profile.comment, 'コメント') }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col">
+                            {% if current_user.is_authenticated and current_user.user_id != user.user_id %}
+                                <button type="button" onclick="addBookmarkUser({{ user.id }})" class="btn btn-warning btn-sm{% if bookmark_info.is_bookmark %} active{% endif %}" data-toggle="button" aria-pressed="{{ bookmark_info.is_bookmark }}" autocomplete="off">
+                                    <i class="far fa-star"></i> Bookmark <span class="badge badge-light" id="bookmark_cnt_id">{{ bookmark_info.bookmark_count }}</span>
+                                </button>
+                                <input type="hidden" name="del_flg" id="del_flg" value="{{ bookmark_info.is_bookmark }}">
+                            {% else %}
+                                <span class="badge badge-warning">
+                                    <i class="far fa-star"></i> Bookmark <span class="badge badge-light">{{ bookmark_info.bookmark_count }}</span>
+                                </span>
+                            {% endif %}
+                            </div>
+                        </div>
+                        {% if current_user.is_authenticated and current_user.user_id == user.user_id %}
+                        <div class="row mt-3">
+                            <div class="col">
+                                <a href="{{ url_for('profile_view.profile') }}">
+                                    <i class="fas fa-user-cog"></i> プロフィール設定
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <div>
-                {% if current_user.is_authenticated and current_user.user_id != user.user_id %}
-                    <button type="button" onclick="addBookmarkUser({{ user.id }})" class="btn btn-warning btn-sm{% if bookmark_info.is_bookmark %} active{% endif %}" data-toggle="button" aria-pressed="{{ bookmark_info.is_bookmark }}" autocomplete="off">
-                        ブックマーク <span class="badge badge-light" id="bookmark_cnt_id">{{ bookmark_info.bookmark_count }}</span>
-                    </button>
-                    <input type="hidden" name="del_flg" id="del_flg" value="{{ bookmark_info.is_bookmark }}">
-                {% else %}
-                    <span class="badge badge-warning">ブックマーク {{ bookmark_info.bookmark_count }}</span>
-                {% endif %}
-            </div>
-            <div>
-                <a href="{{ url_for('profile_view.profile') }}">プロフィール編集</a>
-            </div>
-            <div>
-                <a href="{{ url_for('post_view.add') }}">記事投稿</a>
-            </div>
-            <div>
+            <div class="mt-4">
                 <form action="{{ url_for('blog_view.blog', user_id=user.user_id) }}" method="get">
                     <div class="input-group">
-                        {{ form.keyword(class="form-control", placeholder="キーワード") }}
+                        {{ form.keyword(class="form-control", placeholder="記事検索キーワード") }}
                         <div class="input-group-append">
                             <button class="btn btn-primary">
                                 <i class="fas fa-search"></i>
@@ -83,12 +88,9 @@
                     </div>
                 </form>
             </div>
-            <div>
-                <a href="{{ url_for('blog_view.blog', user_id=user.user_id, bookmark=True) }}">ブックマーク記事</a>
-            </div>
-            <div>
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#bmk-users" aria-expanded="false">
-                    ブックマークユーザー
+            <div class="mt-4">
+                <button class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target="#bmk-users" aria-expanded="false">
+                    <i class="fas fa-users"></i> Bookmark Users <i class="fas fa-caret-down"></i>
                 </button>
                 <div class="collapse" id="bmk-users">
                     <div class="card card-body">
@@ -96,7 +98,7 @@
                             {% for bmk_user in bmk_users %}
                             <li>
                                 <a href="{{ url_for('blog_view.blog', user_id=bmk_user.user_id) }}">
-                                    {{ bmk_user.user_id }}
+                                    {{ bmk_user.user_id }} <i class="fas fa-external-link-alt"></i>
                                 </a>
                             </li>
                             {% endfor %}
@@ -107,4 +109,18 @@
         </div>
     </div>
 </div>
+{% from "helpers/_formhelpers.html" import render_modal %}
+{{ render_modal() }}
+{% endblock %}
+
+{% block script %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <script>
+                toastr['{{ category }}']('{{ message }}');
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 {% endblock %}

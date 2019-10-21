@@ -1,3 +1,14 @@
 body, .jumbotron {
     background-color: #ecf0f1;
 }
+
+.card > img {
+    width: auto;
+    height: 200px;
+    object-fit: cover;
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+}
