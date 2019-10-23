@@ -1,4 +1,17 @@
 $(function() {
+    let pagetop = $('.pagetop');
+    $(window).scroll(function() {
+        if ($(this).scrollTop() > 100) {
+            pagetop.fadeIn();
+        } else {
+            pagetop.fadeOut();
+        }
+    });
+    pagetop.on('click', function () {
+        $('body, html').animate({ scrollTop: 0 }, 500);
+        return false;
+    });
+
     $('.drag-and-drop-area').on('click', function() {
         $('#file').click();
     });
