@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>{% block title %}{% endblock %} - Mini Blog</title>
 </head>
 <body>
@@ -15,27 +16,41 @@
     <a class="navbar-brand" href="{{ url_for('home_view.index') }}">
         <i class="fab fa-blogger-b"></i>
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-expanded="false">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('home_view.index') }}">Home</a>
+                <a class="nav-link" href="{{ url_for('home_view.index') }}">
+                    <i class="fas fa-home"></i> Home
+                </a>
             </li>
             {% if current_user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}">MyBlog</a>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}">
+                    <i class="fas fa-portrait"></i> MyBlog
+                </a>
             </li>
             {% endif %}
         </ul>
         {% if current_user.is_authenticated %}
+        <a class="btn btn-success mr-4" href="{{ url_for('blog_view.blog', user_id=current_user.user_id, bookmark=True) }}">
+            <i class="far fa-folder-open"></i> Bookmark記事一覧
+        </a>
+        <a class="btn btn-info mr-4" href="{{ url_for('post_view.add') }}">
+            <i class="far fa-edit"></i> 投稿する
+        </a>
         <form action="{{ url_for('auth_view.logout') }}" class="form-inline my-2 my-lg-0">
-            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">ログアウト</button>
+            <button class="btn btn-outline-light my-2 my-sm-0">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </form>
         {% else %}
         <form action="{{ url_for('auth_view.login') }}" class="form-inline my-2 my-lg-0">
-            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">ログイン</button>
+            <button class="btn btn-outline-light my-2 my-sm-0">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
         </form>
         {% endif %}
     </div>
@@ -45,7 +60,10 @@
 <main>
 {% block content %}{% endblock %}
 </main>
-<footer></footer>
+<footer class="container-fluid mt-5 mb-3">
+    <div class="pagetop"><a href="#"></a></div>
+    <p class="text-center text-muted">© 2019 Jonki324</p>
+</footer>
 <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/toastr.min.js') }}"></script>
@@ -53,5 +71,6 @@
     $SCRIPT_ROOT = '{{ url_for('home_view.index', _external=True) }}';
 </script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% block script %}{% endblock %}
 </body>
 </html>

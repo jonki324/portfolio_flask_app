@@ -84,6 +84,10 @@ def create_app():
                 return True
         return False
 
+    @app.template_filter('format_date')
+    def format_date_filter(value, format_='%b. %d %Y'):
+        return value.strftime(format_)
+
     @app.after_request
     def add_header(r):
         r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"

@@ -2,7 +2,7 @@
 <div class="form-group">
     {{ field.label }}
     {% if field.errors %}
-        {{ field(class_="form-control is-invalid", placeholder=placeholder)|safe }}
+        {{ field(class_="form-control is-invalid", placeholder=placeholder) | safe }}
         <div class="invalid-feedback">
             <ul>
             {% for error in field.errors %}
@@ -11,7 +11,7 @@
             </ul>
         </div>
     {% else %}
-        {{ field(class_="form-control", placeholder=placeholder)|safe }}
+        {{ field(class_="form-control", placeholder=placeholder) | safe }}
     {% endif %}
 </div>
 {% endmacro %}
@@ -23,31 +23,60 @@
 {% endmacro %}
 
 {% macro render_post(post, bookmarks=[], is_edit=False, is_login=False) %}
-<div class="card">
-    <img class="card-img-top" src="data:image/jpeg;base64,{{ post.image | base64 }}">
+<div class="card shadow-lg">
+    <img id="post-img-{{ post.id }}" class="card-img-top" onclick="showModal({{ post.id }})" src="data:image/jpeg;base64,{{ post.image | base64 }}">
     <div class="card-body">
-        <h5 class="card-title">{{ post.author.user_id }}</h5>
-        <h6 class="card-title">{{ post.title }}</h6>
-        <p class="card-text">{{ post.body }}</p>
-        {% if is_edit %}
-        <p class="card-text"><a href="{{ url_for('post_view.upd', post_id=post.id) }}">更新</a></p>
+        <h6 class="card-title">
+            <p class="text-muted">
+                {{ post.created_at | format_date }} by
+                <a href="{{ url_for('blog_view.blog', user_id=post.author.user_id) }}">
+                    <i class="far fa-user-circle"></i> {{ post.author.user_id | safe }}
+                </a>
+            </p>
+            <p>
+                {{ post.title | safe }}
+            </p>
+        </h6>
         <p class="card-text">
-            <form action="{{ url_for('post_view.rmv', post_id=post.id) }}" method="post">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button class="btn btn-danger">削除</button>
-            </form>
+            <p>{{ post.body | safe }}</p>
+            <div class="mt-5 d-flex justify-content-between align-items-center">
+                {% if is_login %}
+                <button type="button" onclick="addBookmarkPost({{ post.id }})" class="btn btn-warning btn-sm{% if post | is_bookmarked(bookmarks) %} active{% endif %}" data-toggle="button" aria-pressed="{{ post | is_bookmarked(bookmarks) }}" autocomplete="off">
+                    <i class="far fa-star"></i> <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
+                </button>
+                <input type="hidden" name="del_flg" id="del_flg_{{ post.id }}" value="{{ post | is_bookmarked(bookmarks) }}">
+                {% else %}
+                <span class="badge badge-warning">
+                    <i class="far fa-star"></i> Bookmark <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
+                </span>
+                {% endif %}
+                {% if is_edit %}
+                <form class="text-right" action="{{ url_for('post_view.rmv', post_id=post.id) }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="btn-group">
+                        <a class="btn btn-info btn-sm" href="{{ url_for('post_view.upd', post_id=post.id) }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
         </p>
-        {% endif %}
-        {% if is_login %}
-        <p class="card-text">
-            <button type="button" onclick="addBookmarkPost({{ post.id }})" class="btn btn-warning btn-sm{% if post | is_bookmarked(bookmarks) %} active{% endif %}" data-toggle="button" aria-pressed="{{ post | is_bookmarked(bookmarks) }}" autocomplete="off">
-                ブックマーク <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
-            </button>
-            <input type="hidden" name="del_flg" id="del_flg_{{ post.id }}" value="{{ post | is_bookmarked(bookmarks) }}">
-        </p>
-        {% else %}
-            <span class="badge badge-warning">ブックマーク {{ post.users | length }}</span>
-        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_modal() %}
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <img src="" id="postModalImg" class="img-fluid">
+            </div>
+        </div>
     </div>
 </div>
 {% endmacro %}

@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block header %}
-<div class="container">
-    <div class="row mt-5">
-        <div class="col-md-6 offset-md-3 text-center">
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-4 offset-md-4 text-center">
             <span style="font-size: 80px; color: Dodgerblue;">
                 <i class="fab fa-blogger"></i>
             </span>
-            <h1>{% block title %}サインアップ{% endblock %}</h1>
+            <h1>{% block title %}Sign up{% endblock %}</h1>
         </div>
     </div>
 </div>
@@ -15,8 +15,8 @@
 
 {% block content %}
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-md-6 offset-md-3">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
             <div class="card bg-light">
                 <div class="card-body">
                     <h2 class="card-title text-center">
@@ -25,7 +25,7 @@
                         </span>
                     </h2>
                     {% from "helpers/_formhelpers.html" import render_field %}
-                    <form action="{{ url_for('auth_view.signup') }}", method="post">
+                    <form action="{{ url_for('auth_view.signup') }}" method="post">
                         {{ form.csrf_token }}
                         {{ render_field(form.user_id, placeholder="半角英数字") }}
                         {{ render_field(form.email, placeholder="email@mail.com") }}

@@ -1,35 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block header %}
-<div class="container mb-5">
-    <div class="row mt-5">
-        <div class="col-md-8 offset-md-2 text-center">
-            {# <span style="font-size: 80px; color: Dodgerblue;">
-                <i class="fab fa-blogger"></i>
-            </span> #}
-            <h1>{% block title %}プロフィール{% endblock %}</h1>
-        </div>
+<div class="jumbotron jumbotron-fluid mb-3">
+    <div class="container text-center">
+        <h1>{% block title %}Profile{% endblock %}</h1>
     </div>
 </div>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <div class="row mb-3">
-            <div class="col-md-8 offset-md-2">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
-{% endwith %}
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-6 offset-md-3">
             <div class="card bg-light">
                 <div class="card-body">
                     {% from "helpers/_formhelpers.html" import render_field %}
@@ -37,24 +19,34 @@
                         {{ form.csrf_token }}
                         <div class="form-group">
                             {{ form.icon.label }}
-                            {{ form.icon_del() }}
-                            {{ form.icon_del.label }}
                             {% if icon %}
-                            <img src="data:image/jpeg;base64,{{ icon }}">
-                            {% else %}
-                            <span style="font-size: 80px; color: Dodgerblue;">
-                                <i class="far fa-user"></i>
-                            </span>
+                            <div class="form-check">
+                                {{ form.icon_del(id="icon_del", class_="form-check-input") }}
+                                {{ form.icon_del.label }}
+                            </div>
                             {% endif %}
-                            {{ form.icon() }}
+                            <div id="preview">
+                                {% if icon %}
+                                <img id="preview_db" class="rounded icon-prev" src="data:image/jpeg;base64,{{ icon | base64 }}">
+                                {% endif %}
+                            </div>
+                            <div class="drag-and-drop-area drag-and-drop-area-out">
+                                <span>
+                                    <i class="fa fa-image"></i>
+                                    Drag and drop your files
+                                </span>
+                            </div>
+                            {{ form.icon(id='file', class_='form-control-file') }}
                         </div>
                         {{ render_field(form.nickname, placeholder="ニックネーム") }}
                         {{ render_field(form.comment, placeholder="コメント") }}
                         <div class="form-group">
-                            <button class="btn btn-primary btn-block">プロフィール保存</button>
+                            <button class="btn btn-primary btn-block">プロフィール設定</button>
                         </div>
                         <div class="form-group text-center">
-                            <a href="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}">マイブログへ</a>
+                            <a href="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}">
+                                My Blog へ
+                            </a>
                         </div>
                     </form>
                 </div>
