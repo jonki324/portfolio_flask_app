@@ -17,20 +17,26 @@
                     {% from "helpers/_formhelpers.html" import render_field %}
                     <form action="{{ url_for('profile_view.profile') }}" method="post" enctype="multipart/form-data">
                         {{ form.csrf_token }}
-                        <div class="form-check">
-                            {% if icon %}
-                            <img class="rounded icon" src="data:image/jpeg;base64,{{ icon | base64 }}">
-                            {{ form.icon_del(class_="form-check-input") }}
-                            {{ form.icon_del.label }}
-                            {% else %}
-                            <span style="font-size: 80px; color: Dodgerblue;">
-                                <i class="far fa-user"></i>
-                            </span>
-                            {% endif %}
-                        </div>
                         <div class="form-group">
                             {{ form.icon.label }}
-                            {{ form.icon(id='icon-dropzone', class_='form-control-file dropzone') }}
+                            {% if icon %}
+                            <div class="form-check">
+                                {{ form.icon_del(id="icon_del", class_="form-check-input") }}
+                                {{ form.icon_del.label }}
+                            </div>
+                            {% endif %}
+                            <div id="preview">
+                                {% if icon %}
+                                <img id="preview_db" class="rounded icon-prev" src="data:image/jpeg;base64,{{ icon | base64 }}">
+                                {% endif %}
+                            </div>
+                            <div class="drag-and-drop-area drag-and-drop-area-out">
+                                <span>
+                                    <i class="fa fa-image"></i>
+                                    Drag and drop your files
+                                </span>
+                            </div>
+                            {{ form.icon(id='file', class_='form-control-file') }}
                         </div>
                         {{ render_field(form.nickname, placeholder="ニックネーム") }}
                         {{ render_field(form.comment, placeholder="コメント") }}
@@ -39,7 +45,7 @@
                         </div>
                         <div class="form-group text-center">
                             <a href="{{ url_for('blog_view.blog', user_id=current_user.user_id) }}">
-                                My Blogへ
+                                My Blog へ
                             </a>
                         </div>
                     </form>

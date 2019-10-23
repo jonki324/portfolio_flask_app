@@ -14,4 +14,4 @@ class ProfileForm(FlaskForm):
                             validators=[Length(max=200, message='200桁までです')])
     icon = FileField('アイコン',
                      validators=[FileAllowed(['jpg'], message='jpgファイルのみです')])
-    icon_del = BooleanField('アイコンを削除する')
+    icon_del = BooleanField('現在のアイコンを削除する')
