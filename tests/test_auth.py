@@ -14,10 +14,12 @@ def test_show_login(client):
 @pytest.mark.parametrize(('userid', 'email', 'password', 'confirm', 'message'), (
     # 正常登録
     ('userid1', 'email1@mail.com', 'pass', 'pass', '登録しました。'),
-    # 名前チェック
+    # ユーザーIDチェック
     ('', 'email2@mail.com', 'pass', 'pass', '必須です'),
     ('0123456789'*8 + 'a', 'email3@mail.com', 'pass', 'pass', '80桁まで'),
     ('0123456789'*8, 'email4@mail.com', 'pass', 'pass', '登録しました。'),
+    ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 'email15@mail.com', 'pass', 'pass', '登録しました。'),
+    ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@', 'email16@mail.com', 'pass', 'pass', '半角英数字のみです'),
     # メールチェック
     ('userid5', '', 'pass', 'pass', '必須です'),
     ('userid6', 'email6mail.com', 'pass', 'pass', '形式が違います'),
@@ -28,6 +30,10 @@ def test_show_login(client):
     ('userid10', 'email10@mail.com', '0123456789a'*3, 'pass', '30桁まで'),
     ('userid11', 'email11@mail.com', '0123456789'*3, '0123456789'*3, '登録しました。'),
     ('userid12', 'email12@mail.com', 'pass', 'passa', '一致していません'),
+    ('userid13', 'email17@mail.com', '0123456789', '0123456789', '登録しました。'),
+    ('userid14', 'email18@mail.com', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '登録しました。'),
+    ('userid15', 'email19@mail.com', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', '登録しました。'),
+    ('userid16', 'email20@mail.com', 'abcdefghijklmnopqrstuvwxyz@', 'abcdefghijklmnopqrstuvwxyz@', '半角英数字のみです'),
     # 再入力チェック
     ('userid13', 'email13@mail.com', 'pass', '', '必須です'),
     # ユニークチェック
