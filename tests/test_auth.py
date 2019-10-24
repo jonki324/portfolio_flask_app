@@ -72,3 +72,9 @@ def test_validate_login(client, email, password, message):
 def test_redirect_logout(client):
     rv = client.get('/logout', follow_redirects=True)
     assert 'ログインしてください' in rv.data.decode('utf-8')
+
+
+def test_logout_for_login_user(client):
+    client.post('/login', data={'email': 'email1@mail.com', 'password': 'pass'}, follow_redirects=True)
+    rv = client.get('/logout', follow_redirects=True)
+    assert 'ログアウトしました' in rv.data.decode('utf-8')
