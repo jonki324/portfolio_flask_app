@@ -1,10 +1,7 @@
-from flask_uploads import UploadSet, IMAGES
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import FileField, StringField, TextAreaField, HiddenField, ValidationError
 from wtforms.validators import DataRequired, Length
-
-images = UploadSet('images', IMAGES)
 
 
 class PostForm(FlaskForm):
@@ -15,7 +12,7 @@ class PostForm(FlaskForm):
                          validators=[DataRequired('必須です'),
                                      Length(max=200, message='200桁までです')])
     image = FileField('ピクチャ',
-                      validators=[FileAllowed(['jpg'], message='jpgファイルのみです')])
+                      validators=[FileAllowed(['jpg', 'jpeg'], message='jpgファイルのみです')])
     is_img_saved = HiddenField()
 
     def validate_image(self, field):

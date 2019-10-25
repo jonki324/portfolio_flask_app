@@ -15,7 +15,6 @@ flask-migrate = "*"
 flask-script = "*"
 flask-wtf = "*"
 flask-login = "*"
-flask-uploads = "*"
 flask-paginate = "*"
 
 [requires]
