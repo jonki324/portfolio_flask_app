@@ -1,4 +1,5 @@
 $(function() {
+    // トップへ戻る
     let pagetop = $('.pagetop');
     $(window).scroll(function() {
         if ($(this).scrollTop() > 100) {
@@ -7,11 +8,13 @@ $(function() {
             pagetop.fadeOut();
         }
     });
+
     pagetop.on('click', function () {
         $('body, html').animate({ scrollTop: 0 }, 500);
         return false;
     });
 
+    // ファイルアップロード
     $('.drag-and-drop-area').on('click', function() {
         $('#file').click();
     });
@@ -52,13 +55,13 @@ $(function() {
         e.preventDefault();
         document.getElementById('file').files = e.originalEvent.dataTransfer.files;
         $('#file').change();
-    })
+    });
 
     $('#file').on('change', function(e) {
         let file = e.target.files[0];
         let reader = new FileReader();
 
-        if (typeof file == 'undefined' || file.type.indexOf("image") < 0) {
+        if (typeof file == 'undefined' || file.type.indexOf('image') < 0) {
             return false;
         }
 
@@ -71,7 +74,7 @@ $(function() {
 
                 $('#preview').append($('<img>').attr({
                     src: e.target.result,
-                    class: "icon-prev preview_in"
+                    class: 'icon-prev preview_in'
                 })).hide().fadeIn(1000);
             };
         })(file);
@@ -83,10 +86,12 @@ $(function() {
         e.stopPropagation();
         e.preventDefault();
     });
+
     $(document).on('dragover', function (e) {
         e.stopPropagation();
         e.preventDefault();
     });
+
     $(document).on('drop', function (e) {
         e.stopPropagation();
         e.preventDefault();
@@ -117,9 +122,7 @@ function addBookmarkPost(post_id) {
         toastr.success(data['msg']);
     }).fail((data) => {
         toastr.error('通信エラー');
-    }).always((data) => {
-        console.log(data);
-    })
+    });
 }
 
 function addBookmarkUser(user_id) {
@@ -146,9 +149,7 @@ function addBookmarkUser(user_id) {
         toastr.success(data['msg']);
     }).fail((data) => {
         toastr.error('通信エラー');
-    }).always((data) => {
-        console.log(data);
-    })
+    });
 }
 
 function toBoolean(str) {

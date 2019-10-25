@@ -19,24 +19,33 @@
                         {{ form.csrf_token }}
                         <div class="form-group">
                             {{ form.icon.label }}
-                            {% if icon %}
+                            {% if form.icon.data %}
                             <div class="form-check">
                                 {{ form.icon_del(id="icon_del", class_="form-check-input") }}
                                 {{ form.icon_del.label }}
                             </div>
                             {% endif %}
                             <div id="preview">
-                                {% if icon %}
-                                <img id="preview_db" class="rounded icon-prev" src="data:image/jpeg;base64,{{ icon | base64 }}">
+                                {% if form.icon.data %}
+                                <img id="preview_db" class="rounded icon-prev" src="data:image/jpeg;base64,{{ form.icon.data | base64 }}">
                                 {% endif %}
                             </div>
-                            <div class="drag-and-drop-area drag-and-drop-area-out">
+                            <div class="drag-and-drop-area drag-and-drop-area-out form-control{% if form.icon.errors %} is-invalid{% endif %}">
                                 <span>
                                     <i class="fa fa-image"></i>
                                     Drag and drop your files
                                 </span>
                             </div>
-                            {{ form.icon(id='file', class_='form-control-file') }}
+                            {{ form.icon(id='file', class_='form-control-file', accept='image/jpeg') }}
+                            {% if form.icon.errors %}
+                            <div class="invalid-feedback">
+                                <ul>
+                                {% for error in form.icon.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
                         </div>
                         {{ render_field(form.nickname, placeholder="ニックネーム") }}
                         {{ render_field(form.comment, placeholder="コメント") }}
