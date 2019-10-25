@@ -38,27 +38,29 @@ def add():
 def upd(post_id):
     current_app.logger.info('記事更新処理開始')
 
-    try:
-        user, post = db.session.query(User, BlogPost).filter(db.and_(User.id == current_user.id,
-                                                                     BlogPost.id == post_id)).first()
-    except Exception:
-        flash('記事がありません。', 'danger')
+    post = get_post_by_id(post_id)
+    if post is None:
+        flash('記事がありません。', 'error')
         return redirect(url_for('blog_view.blog', user_id=current_user.user_id))
 
     form = PostForm(obj=post, is_img_saved='y')
 
-    if request.method == 'POST' and form.validate_on_submit():
-        current_app.logger.info('記事更新処理開始')
-        post.title = form.title.data
-        post.body = form.body.data
-        if form.image.data:
-            post.image = form.image.data.read()
+    if request.method == 'POST':
+        is_validate = form.validate_on_submit()
+        if is_validate:
+            current_app.logger.info('記事更新処理開始')
+            post.title = form.title.data
+            post.body = form.body.data
+            if form.image.data:
+                post.image = form.image.data.read()
 
-        db.session.add(post)
-        db.session.commit()
+            db.session.add(post)
+            db.session.commit()
 
-        flash('更新しました。', 'success')
-        return redirect(url_for('blog_view.blog', user_id=current_user.user_id))
+            flash('更新しました。', 'success')
+            return redirect(url_for('blog_view.blog', user_id=current_user.user_id))
+        else:
+            form.image.data = post.image
 
     return render_template('post.html', form=form)
 
@@ -69,11 +71,9 @@ def rmv(post_id):
     current_app.logger.info('記事削除処理開始')
 
     if request.method == 'POST':
-        try:
-            user, post = db.session.query(User, BlogPost).filter(db.and_(User.id == current_user.id,
-                                                                         BlogPost.id == post_id)).first()
-        except Exception:
-            flash('記事がありません。', 'danger')
+        post = get_post_by_id(post_id)
+        if post is None:
+            flash('記事がありません。', 'error')
             return redirect(url_for('blog_view.blog', user_id=current_user.user_id))
 
         db.session.delete(post)
@@ -81,3 +81,15 @@ def rmv(post_id):
         flash('削除しました。', 'success')
 
     return redirect(url_for('blog_view.blog', user_id=current_user.user_id))
+
+
+def get_post_by_id(post_id):
+    result = None
+    try:
+        user, post = db.session.query(User,
+                                      BlogPost).filter(db.and_(User.id == current_user.id,
+                                                               BlogPost.id == post_id)).first()
+        result = post
+    except TypeError:
+        pass
+    return result
