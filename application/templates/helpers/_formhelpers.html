@@ -22,35 +22,50 @@
 {% endif %}
 {% endmacro %}
 
-{% macro render_post(post, bookmarks=[], is_edit=False, is_login=False) %}
+{% macro render_post(post, is_loggedin=False, is_editable=False, current_user_bookmarks=[]) %}
 <div class="card shadow-lg">
-    <img id="post-img-{{ post.id }}" class="card-img-top" onclick="showModal({{ post.id }})" src="data:image/jpeg;base64,{{ post.image | base64 }}">
+    <img id="post-img-{{ post.id }}" class="card-img-top"
+         onclick="showModal({{ post.id }})"
+         src="data:image/jpeg;base64,{{ post.image | base64 }}">
     <div class="card-body">
         <h6 class="card-title">
             <p class="text-muted">
                 {{ post.created_at | format_date }} by
                 <a href="{{ url_for('blog_view.blog', user_id=post.author.user_id) }}">
-                    <i class="far fa-user-circle"></i> {{ post.author.user_id | safe }}
+                    <i class="far fa-user-circle"></i>&nbsp;
+                    {{ post.author.user_id | safe }}
                 </a>
             </p>
-            <p>
-                {{ post.title | safe }}
-            </p>
+            <p>{{ post.title | safe }}</p>
         </h6>
         <p class="card-text">
             <p>{{ post.body | safe }}</p>
             <div class="mt-5 d-flex justify-content-between align-items-center">
-                {% if is_login %}
-                <button type="button" onclick="addBookmarkPost({{ post.id }})" class="btn btn-warning btn-sm{% if post | is_bookmarked(bookmarks) %} active{% endif %}" data-toggle="button" aria-pressed="{{ post | is_bookmarked(bookmarks) }}" autocomplete="off">
-                    <i class="far fa-star"></i> <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
+                {% if is_loggedin %}
+                {# ログインしている場合 #}
+                <button type="button" data-toggle="button" autocomplete="off"
+                        onclick="addBookmarkPost({{ post.id }})"
+                        class="btn btn-warning btn-sm{% if post | is_bookmarked(current_user_bookmarks) %} active{% endif %}"
+                        aria-pressed="{{ post | is_bookmarked(current_user_bookmarks) }}">
+                    <i class="far fa-star"></i>&nbsp;
+                    <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">
+                        {{ post.users | length }}
+                    </span>
                 </button>
-                <input type="hidden" name="del_flg" id="del_flg_{{ post.id }}" value="{{ post | is_bookmarked(bookmarks) }}">
+                <input type="hidden" name="del_flg" id="del_flg_{{ post.id }}"
+                       value="{{ post | is_bookmarked(current_user_bookmarks) }}">
                 {% else %}
+                {# ログインしていない場合 #}
                 <span class="badge badge-warning">
-                    <i class="far fa-star"></i> Bookmark <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">{{ post.users | length }}</span>
+                    <i class="far fa-star"></i>&nbsp;
+                    Bookmark&nbsp;
+                    <span class="badge badge-light" id="bookmark_cnt_id_{{ post.id }}">
+                        {{ post.users | length }}
+                    </span>
                 </span>
                 {% endif %}
-                {% if is_edit %}
+                {% if is_editable %}
+                {# ログインしているかつログインユーザーが投稿した記事の場合 #}
                 <form class="text-right" action="{{ url_for('post_view.rmv', post_id=post.id) }}" method="post">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="btn-group">

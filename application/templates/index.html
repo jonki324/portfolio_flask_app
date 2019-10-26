@@ -18,23 +18,35 @@ Home
         <div class="col-md-6 offset-md-3">
             <form action="{{ url_for('home_view.index') }}" method="get">
                 <div class="input-group">
-                    {{ form.keyword(class="form-control", placeholder="検索キーワード") }}
+                    {% if form.keyword.errors %}
+                        {{ form.keyword(class="form-control is-invalid", placeholder="検索キーワード") | safe }}
+                        <div class="invalid-feedback order-last">
+                            <ul>
+                            {% for error in form.keyword.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        {{ form.keyword(class="form-control", placeholder="検索キーワード") | safe }}
+                    {% endif %}
                     <div class="input-group-append">
                         <button class="btn btn-primary">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
                 </div>
+                {{ form.csrf_token }}
             </form>
         </div>
     </div>
     <div class="row mb-3">
-        {% from "helpers/_formhelpers.html" import render_post %}
-        {% for post in posts %}
-            <div class="col-md-3 mb-4">
-            {{ render_post(post, bookmarks=bookmarks, is_login=current_user.is_authenticated) }}
-            </div>
-        {% endfor %}
+    {% from "helpers/_formhelpers.html" import render_post %}
+    {% for post in posts %}
+        <div class="col-md-3 mb-4">
+        {{ render_post(post, is_loggedin=current_user.is_authenticated, current_user_bookmarks=current_user_bookmarks) }}
+        </div>
+    {% endfor %}
         <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
     </div>
     {{ pagination.links }}
