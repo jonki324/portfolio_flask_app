@@ -28,6 +28,7 @@ class DevelopmentConfig(Config):
 
 
 class TestingConfig(Config):
+    DEBUG = True
     TESTING = True
     LOG_FILE_NAME = 'testing.log'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{}'.format(str(Path(__file__)
