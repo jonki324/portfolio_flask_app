@@ -3,7 +3,11 @@
 {% block header %}
 <div class="jumbotron jumbotron-fluid mb-3">
     <div class="container text-center">
-        <h1>{% block title %}{{ user.user_id }}{% endblock %} Blog</h1>
+        <h1>
+            {% block title %}
+                {{ user.user_id | safe }}
+            {% endblock %}&nbsp;Blog
+        </h1>
     </div>
 </div>
 {% endblock %}
@@ -16,7 +20,7 @@
                 {% from "helpers/_formhelpers.html" import render_post %}
                 {% for post in posts %}
                 <div class="col-md-4 mb-4">
-                    {{ render_post(post, current_user_bookmarks=bookmarks, is_editable=current_user.is_authenticated and current_user.user_id == user.user_id, is_loggedin=current_user.is_authenticated) }}
+                    {{ render_post(post, is_loggedin=current_user.is_authenticated, is_editable=current_user.is_authenticated and current_user.user_id == user.user_id, current_user_bookmarks=current_user_bookmarks) }}
                 </div>
                 {% endfor %}
                 <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">
@@ -24,7 +28,6 @@
             {{ pagination.links }}
         </div>
         <div class="col-md-3">
-        {% from "helpers/_formhelpers.html" import render_profile %}
             <div class="card">
                 <div class="card-body">
                     <div class="container-fluid">
@@ -39,36 +42,55 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-8">
-                                ID : {{ user.user_id }}
+                                ID : {{ user.user_id | safe }}
                             </div>
                         </div>
-                        {% if profile.nickname and profile.comment %}
+                        {% from "helpers/_formhelpers.html" import render_profile %}
+                        {% if profile.nickname or profile.comment %}
                         <div class="row mt-3">
                             <div class="col">
+                                {% if profile.nickname %}
                                 {{ render_profile(profile.nickname, 'ニックネーム') }}
+                                {% endif %}
+                                {% if profile.comment %}
                                 {{ render_profile(profile.comment, 'コメント') }}
+                                {% endif %}
                             </div>
                         </div>
                         {% endif %}
                         <div class="row mt-3">
                             <div class="col">
                             {% if current_user.is_authenticated and current_user.user_id != user.user_id %}
-                                <button type="button" onclick="addBookmarkUser({{ user.id }})" class="btn btn-warning btn-sm{% if bookmark_info.is_bookmark %} active{% endif %}" data-toggle="button" aria-pressed="{{ bookmark_info.is_bookmark }}" autocomplete="off">
-                                    <i class="far fa-star"></i> Bookmark <span class="badge badge-light" id="bookmark_cnt_id">{{ bookmark_info.bookmark_count }}</span>
+                            {# ログインしていて他ユーザーのページを閲覧している場合 #}
+                                <button type="button" data-toggle="button" autocomplete="off"
+                                        onclick="addBookmarkUser({{ user.id }})"
+                                        class="btn btn-warning btn-sm{% if profile_bookmark_info.is_bookmarked %} active{% endif %}"
+                                        aria-pressed="{{ profile_bookmark_info.is_bookmark }}">
+                                    <i class="far fa-star"></i>&nbsp;
+                                    Bookmark&nbsp;
+                                    <span class="badge badge-light" id="bookmark_cnt_id">
+                                        {{ profile_bookmark_info.bookmark_count }}
+                                    </span>
                                 </button>
-                                <input type="hidden" name="del_flg" id="del_flg" value="{{ bookmark_info.is_bookmark }}">
+                                <input type="hidden" name="del_flg" id="del_flg" value="{{ profile_bookmark_info.is_bookmarked }}">
                             {% else %}
+                            {# ログインしていない、自または、他ユーザーのページを閲覧している場合 #}
                                 <span class="badge badge-warning">
-                                    <i class="far fa-star"></i> Bookmark <span class="badge badge-light">{{ bookmark_info.bookmark_count }}</span>
+                                    <i class="far fa-star"></i>&nbsp;
+                                    Bookmark&nbsp;
+                                    <span class="badge badge-light">
+                                        {{ profile_bookmark_info.bookmark_count }}
+                                    </span>
                                 </span>
                             {% endif %}
                             </div>
                         </div>
                         {% if current_user.is_authenticated and current_user.user_id == user.user_id %}
+                        {# ログインしていて自ユーザーのページを閲覧している場合 #}
                         <div class="row mt-3">
                             <div class="col">
                                 <a href="{{ url_for('profile_view.profile') }}">
-                                    <i class="fas fa-user-cog"></i> プロフィール設定
+                                    <i class="fas fa-user-cog"></i>&nbsp;プロフィール設定
                                 </a>
                             </div>
                         </div>
@@ -79,26 +101,42 @@
             <div class="mt-4">
                 <form action="{{ url_for('blog_view.blog', user_id=user.user_id) }}" method="get">
                     <div class="input-group">
-                        {{ form.keyword(class="form-control", placeholder="記事検索キーワード") }}
+                    {% if form.keyword.errors %}
+                        {{ form.keyword(class="form-control is-invalid", placeholder="記事検索キーワード") | safe }}
+                        <div class="invalid-feedback order-last">
+                            <ul>
+                            {% for error in form.keyword.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        {{ form.keyword(class="form-control", placeholder="ブログ内記事検索") | safe }}
+                    {% endif %}
                         <div class="input-group-append">
                             <button class="btn btn-primary">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
                     </div>
+                    {{ form.csrf_token }}
                 </form>
             </div>
             <div class="mt-4">
-                <button class="btn btn-primary btn-block" type="button" data-toggle="collapse" data-target="#bmk-users" aria-expanded="false">
-                    <i class="fas fa-users"></i> Bookmark Users <i class="fas fa-caret-down"></i>
+                <button class="btn btn-primary btn-block" type="button"
+                        data-toggle="collapse" data-target="#bmk-users" aria-expanded="false">
+                    <i class="fas fa-users"></i>&nbsp;
+                    Bookmark Users&nbsp;
+                    <i class="fas fa-caret-down"></i>
                 </button>
                 <div class="collapse" id="bmk-users">
                     <div class="card card-body">
                         <ul>
-                            {% for bmk_user in bmk_users %}
+                            {% for bmk_user in bookmark_users_by_blog_user %}
                             <li>
                                 <a href="{{ url_for('blog_view.blog', user_id=bmk_user.user_id) }}">
-                                    {{ bmk_user.user_id }} <i class="fas fa-external-link-alt"></i>
+                                    {{ bmk_user.user_id | safe }}&nbsp;
+                                    <i class="fas fa-external-link-alt"></i>
                                 </a>
                             </li>
                             {% endfor %}

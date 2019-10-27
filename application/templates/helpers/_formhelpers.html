@@ -18,7 +18,7 @@
 
 {% macro render_profile(field, title) %}
 {% if field %}
-    <div>{{ title }} : {{ field }}</div>
+    <div>{{ title }} : {{ field | safe }}</div>
 {% endif %}
 {% endmacro %}
 
