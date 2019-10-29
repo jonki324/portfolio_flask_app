@@ -20,7 +20,7 @@
                 {% from "helpers/_formhelpers.html" import render_post %}
                 {% for post in posts %}
                 <div class="col-md-4 mb-4">
-                    {{ render_post(post, is_loggedin=current_user.is_authenticated, is_editable=current_user.is_authenticated and current_user.user_id == user.user_id, current_user_bookmarks=current_user_bookmarks) }}
+                    {{ render_post(post, is_loggedin=current_user.is_authenticated, is_editable=current_user.is_authenticated and current_user.id == post.author_id, current_user_bookmarks=current_user_bookmarks) }}
                 </div>
                 {% endfor %}
                 <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token() }}">

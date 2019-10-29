@@ -108,7 +108,7 @@ def test_rmv_duplicate_bookmark_post(client):
 
 def test_add_bookmark_user(client):
     login(client)
-    rv = client.post('/bookmark/user/add', data={'user_id': 'user02'}, follow_redirects=True)
+    rv = client.post('/bookmark/user/add', data={'user_id': 2}, follow_redirects=True)
     assert '登録しました' in rv.data.decode('unicode_escape')
     assert '"bookmark_count": 1' in rv.data.decode('unicode_escape')
     assert '"del_flg": true' in rv.data.decode('unicode_escape')
@@ -116,7 +116,7 @@ def test_add_bookmark_user(client):
 
 def test_add_duplicate_bookmark_user(client):
     login(client)
-    rv = client.post('/bookmark/user/add', data={'user_id': 'user02'}, follow_redirects=True)
+    rv = client.post('/bookmark/user/add', data={'user_id': 2}, follow_redirects=True)
     assert '登録済みです' in rv.data.decode('unicode_escape')
     assert '"bookmark_count": 1' in rv.data.decode('unicode_escape')
     assert '"del_flg": true' in rv.data.decode('unicode_escape')
@@ -124,7 +124,7 @@ def test_add_duplicate_bookmark_user(client):
 
 def test_rmv_bookmark_user(client):
     login(client)
-    rv = client.post('/bookmark/user/rmv', data={'user_id': 'user02'}, follow_redirects=True)
+    rv = client.post('/bookmark/user/rmv', data={'user_id': 2}, follow_redirects=True)
     assert '解除しました' in rv.data.decode('unicode_escape')
     assert '"bookmark_count": 0' in rv.data.decode('unicode_escape')
     assert '"del_flg": false' in rv.data.decode('unicode_escape')
@@ -132,7 +132,7 @@ def test_rmv_bookmark_user(client):
 
 def test_rmv_duplicate_bookmark_user(client):
     login(client)
-    rv = client.post('/bookmark/user/rmv', data={'user_id': 'user02'}, follow_redirects=True)
+    rv = client.post('/bookmark/user/rmv', data={'user_id': 2}, follow_redirects=True)
     assert '解除済みです' in rv.data.decode('unicode_escape')
     assert '"bookmark_count": 0' in rv.data.decode('unicode_escape')
     assert '"del_flg": false' in rv.data.decode('unicode_escape')

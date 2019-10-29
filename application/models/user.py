@@ -16,7 +16,7 @@ class User(UserMixin, Base):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    _password = db.Column(db.String(80), nullable=False)
+    _password = db.Column(db.String(100), nullable=False)
 
     posts = db.relationship('BlogPost', back_populates='author',
                             order_by='desc(BlogPost.created_at)')

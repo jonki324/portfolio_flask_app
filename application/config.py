@@ -17,7 +17,13 @@ class Config(object):
 
 
 class ProductionConfig(Config):
-    pass
+    DB_USER = 'dbuser'
+    DB_PASS = 'dbpass'
+    DB_HOST = 'localhost'
+    DB_PORT = '5432'
+    DB_URI = 'postgresql+psycopg2://{}:{}@{}:{}/portfolio_flask_app'.format(DB_USER, DB_PASS,
+                                                                            DB_HOST, DB_PORT)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', default=DB_URI)
 
 
 class DevelopmentConfig(Config):

@@ -14,6 +14,14 @@ def app():
     db_fd, db_path = tempfile.mkstemp()
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(db_path)
 
+    # DB_USER = 'dbuser'
+    # DB_PASS = 'dbpass'
+    # DB_HOST = 'localhost'
+    # DB_PORT = '5432'
+    # DB_URI = 'postgresql+psycopg2://{}:{}@{}:{}/portfolio_flask_app'.format(DB_USER, DB_PASS,
+    #                                                                         DB_HOST, DB_PORT)
+    # app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
+
     with app.app_context():
         create_db(app)
 
