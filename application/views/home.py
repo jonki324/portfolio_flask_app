@@ -43,8 +43,7 @@ def index():
 
 def fetch_post_by_keyword(keyword):
     query = db.session.query(BlogPost)
-    query = query.filter(db.or_(BlogPost.author_id.like('%{}%'.format(keyword)),
-                                BlogPost.title.like('%{}%'.format(keyword)),
+    query = query.filter(db.or_(BlogPost.title.like('%{}%'.format(keyword)),
                                 BlogPost.body.like('%{}%'.format(keyword))))
     query = query.order_by(BlogPost.created_at.desc())
     return query.all()
