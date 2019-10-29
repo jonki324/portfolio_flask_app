@@ -8,7 +8,7 @@ class BlogPost(Base):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     title = db.Column(db.String(100), nullable=False)
     body = db.Column(db.String(200), nullable=False)
-    image = db.Column(db.Binary, nullable=False)
+    image = db.Column(db.LargeBinary, nullable=False)
 
     author = db.relationship('User', back_populates='posts')
     users = db.relationship('BookmarkPost', back_populates='bookmark_posts')

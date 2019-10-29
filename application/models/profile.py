@@ -8,7 +8,7 @@ class Profile(Base):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     nickname = db.Column(db.String(80))
     comment = db.Column(db.String(200))
-    icon = db.Column(db.Binary)
+    icon = db.Column(db.LargeBinary)
 
     user = db.relationship('User', back_populates='profile')
 
