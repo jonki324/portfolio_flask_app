@@ -11,7 +11,8 @@ class BlogPost(Base):
     image = db.Column(db.LargeBinary, nullable=False)
 
     author = db.relationship('User', back_populates='posts')
-    users = db.relationship('BookmarkPost', back_populates='bookmark_posts')
+    users = db.relationship('BookmarkPost', back_populates='bookmark_posts',
+                            cascade='save-update, merge, delete')
 
     def __init__(self, title, body, image):
         self.title = title

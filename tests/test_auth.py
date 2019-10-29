@@ -18,8 +18,10 @@ def test_show_login(client):
     ('', 'email2@mail.com', 'pass', 'pass', '必須です'),
     ('0123456789'*8 + 'a', 'email3@mail.com', 'pass', 'pass', '80桁まで'),
     ('0123456789'*8, 'email4@mail.com', 'pass', 'pass', '登録しました。'),
-    ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 'email15@mail.com', 'pass', 'pass', '登録しました。'),
-    ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@', 'email16@mail.com', 'pass', 'pass', '半角英数字のみです'),
+    ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 'email15@mail.com', 'pass',
+     'pass', '登録しました。'),
+    ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@', 'email16@mail.com', 'pass',
+     'pass', '半角英数字のみです'),
     # メールチェック
     ('userid5', '', 'pass', 'pass', '必須です'),
     ('userid6', 'email6mail.com', 'pass', 'pass', '形式が違います'),
@@ -31,9 +33,12 @@ def test_show_login(client):
     ('userid11', 'email11@mail.com', '0123456789'*3, '0123456789'*3, '登録しました。'),
     ('userid12', 'email12@mail.com', 'pass', 'passa', '一致していません'),
     ('userid13', 'email17@mail.com', '0123456789', '0123456789', '登録しました。'),
-    ('userid14', 'email18@mail.com', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '登録しました。'),
-    ('userid15', 'email19@mail.com', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz', '登録しました。'),
-    ('userid16', 'email20@mail.com', 'abcdefghijklmnopqrstuvwxyz@', 'abcdefghijklmnopqrstuvwxyz@', '半角英数字のみです'),
+    ('userid14', 'email18@mail.com', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+     '登録しました。'),
+    ('userid15', 'email19@mail.com', 'abcdefghijklmnopqrstuvwxyz', 'abcdefghijklmnopqrstuvwxyz',
+     '登録しました。'),
+    ('userid16', 'email20@mail.com', 'abcdefghijklmnopqrstuvwxyz@', 'abcdefghijklmnopqrstuvwxyz@',
+     '半角英数字のみです'),
     # 再入力チェック
     ('userid13', 'email13@mail.com', 'pass', '', '必須です'),
     # ユニークチェック
@@ -65,7 +70,8 @@ def test_validate_signup(client, userid, email, password, confirm, message):
     ('email1@mail.com', 'passx', 'メールアドレスかパスワードが違います'),
 ))
 def test_validate_login(client, email, password, message):
-    rv = client.post('/login', data={'email': email, 'password': password}, follow_redirects=True)
+    rv = client.post('/login', data={'email': email, 'password': password},
+                     follow_redirects=True)
     assert message in rv.data.decode('utf-8')
 
 
@@ -75,6 +81,7 @@ def test_redirect_logout(client):
 
 
 def test_logout_for_login_user(client):
-    client.post('/login', data={'email': 'email1@mail.com', 'password': 'pass'}, follow_redirects=True)
+    client.post('/login', data={'email': 'email1@mail.com', 'password': 'pass'},
+                follow_redirects=True)
     rv = client.get('/logout', follow_redirects=True)
     assert 'ログアウトしました' in rv.data.decode('utf-8')
