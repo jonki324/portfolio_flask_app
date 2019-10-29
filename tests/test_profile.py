@@ -38,7 +38,8 @@ def test_invalid_profile(client, nickname, comment, icon, icon_del, message):
     login(client)
     file_path = os.path.join('./tests/assets', icon)
     with open(file_path, 'rb') as f:
-        data = {'nickname': nickname, 'comment': comment, 'icon': (f, f.name), 'icon_del': icon_del}
+        data = {'nickname': nickname, 'comment': comment, 'icon': (f, f.name),
+                'icon_del': icon_del}
         rv = client.post('/profile', data=data, follow_redirects=True,
                          content_type='multipart/form-data')
         assert message in rv.data.decode('utf-8')
@@ -56,7 +57,8 @@ def test_valid_profile(client, nickname, comment, icon, icon_del, message):
     login(client)
     file_path = os.path.join('./tests/assets', icon)
     with open(file_path, 'rb') as f:
-        data = {'nickname': nickname, 'comment': comment, 'icon': (f, f.name), 'icon_del': icon_del}
+        data = {'nickname': nickname, 'comment': comment, 'icon': (f, f.name),
+                'icon_del': icon_del}
         rv = client.post('/profile', data=data, follow_redirects=True,
                          content_type='multipart/form-data')
         assert message in rv.data.decode('utf-8')
@@ -74,7 +76,8 @@ def test_valid_profile_icon(client, nickname, comment, icon, icon_del, message):
     if icon != '':
         file_path = os.path.join('./tests/assets', icon)
         with open(file_path, 'rb') as f:
-            data = {'nickname': nickname, 'comment': comment, 'icon': (f, f.name), 'icon_del': icon_del}
+            data = {'nickname': nickname, 'comment': comment, 'icon': (f, f.name),
+                    'icon_del': icon_del}
             rv = client.post('/profile', data=data, follow_redirects=True,
                              content_type='multipart/form-data')
         assert message in rv.data.decode('utf-8')

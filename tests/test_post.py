@@ -57,7 +57,8 @@ def test_invalid_post_add(client, title, body, image, is_img_saved, message):
         assert message in rv.data.decode('utf-8')
     else:
         with open(file_path, 'rb') as f:
-            data = {'title': title, 'body': body, 'image': (f, f.name), 'is_img_saved': is_img_saved}
+            data = {'title': title, 'body': body, 'image': (f, f.name),
+                    'is_img_saved': is_img_saved}
             rv = client.post('/post/add', data=data, follow_redirects=True,
                              content_type='multipart/form-data')
             assert message in rv.data.decode('utf-8')
@@ -122,7 +123,8 @@ def test_valid_post_upd(client, title, body, image, is_img_saved, message, upd):
     file_path = os.path.join('./tests/assets', image)
     if image:
         with open(file_path, 'rb') as f:
-            data = {'title': title, 'body': body, 'image': (f, f.name), 'is_img_saved': is_img_saved}
+            data = {'title': title, 'body': body, 'image': (f, f.name),
+                    'is_img_saved': is_img_saved}
             rv = client.post('/post/upd/1', data=data, follow_redirects=True,
                              content_type='multipart/form-data')
             assert message in rv.data.decode('utf-8')

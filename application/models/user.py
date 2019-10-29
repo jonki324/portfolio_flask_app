@@ -18,9 +18,11 @@ class User(UserMixin, Base):
     email = db.Column(db.String(120), unique=True, nullable=False)
     _password = db.Column(db.String(80), nullable=False)
 
-    posts = db.relationship('BlogPost', back_populates='author', order_by='desc(BlogPost.created_at)')
+    posts = db.relationship('BlogPost', back_populates='author',
+                            order_by='desc(BlogPost.created_at)')
     profile = db.relationship('Profile', back_populates='user', uselist=False)
-    bookmark_posts = db.relationship('BookmarkPost', back_populates='user', order_by='desc(BookmarkPost.created_at)')
+    bookmark_posts = db.relationship('BookmarkPost', back_populates='user',
+                                     order_by='desc(BookmarkPost.created_at)')
     bookmark_users = db.relationship('User',
                                      secondary=bookmark_users,
                                      primaryjoin=id == bookmark_users.c.user_id,

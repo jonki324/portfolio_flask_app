@@ -3,10 +3,10 @@ import time
 
 
 def signup(client):
-    data1 = {'user_id': 'user01', 'email': 'user01@email1.com',
-            'password': 'pass', 'confirm': 'pass'}
-    data2 = {'user_id': 'user02', 'email': 'user02@email2.com',
-            'password': 'pass', 'confirm': 'pass'}
+    data1 = {'user_id': 'user01', 'email': 'user01@email1.com', 'password': 'pass',
+             'confirm': 'pass'}
+    data2 = {'user_id': 'user02', 'email': 'user02@email2.com', 'password': 'pass',
+             'confirm': 'pass'}
     client.post('/signup', data=data1, follow_redirects=True)
     time.sleep(0.2)
     client.post('/signup', data=data2, follow_redirects=True)
