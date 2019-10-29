@@ -11,9 +11,8 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MIGRATIONS_DIR = str(Path(__file__).parent / 'migrations')
-    SECRET_KEY = os.urandom(24)
-    WTF_CSRF_SECRET_KEY = os.urandom(24)
-    WTF_CSRF_SSL_STRICT = False
+    SECRET_KEY = os.environ.get('SECRET_KEY', default=os.urandom(24))
+    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY', default=os.urandom(24))
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
 
 
