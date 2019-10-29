@@ -13,6 +13,7 @@ class Config(object):
     MIGRATIONS_DIR = str(Path(__file__).parent / 'migrations')
     SECRET_KEY = os.urandom(24)
     WTF_CSRF_SECRET_KEY = os.urandom(24)
+    WTF_CSRF_SSL_STRICT = False
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
 
 
